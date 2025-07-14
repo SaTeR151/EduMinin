@@ -46,6 +46,7 @@ func main() {
 		}
 		{
 			apiGroup.GET("/courses", restcourses.GetCourses(services))
+			apiGroup.GET("/courses/title", restcourses.GetCoursesTitle(services))
 			coursesGroups := apiGroup.Group("/courses")
 			coursesGroups.POST("/", restcourses.PostCourse(services))
 			coursesGroups.DELETE("/", restcourses.DeleteCourse(services))

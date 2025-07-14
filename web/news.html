@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Новости — Учебный центр</title>
+  <link rel="icon" type="image/png" href="assets/icons/favicon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-kuh6GZlN8YYNV3CFyraYszEEiQxhT1VgezjuV3zw+FfLMKktlK6KaO5y+6ZT+0IY68PfQWda+E3bfUhBru7W2g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+  <!-- фиксированное верхнее меню -->
+  <header class="site-header">
+        <nav class="main-nav">
+            <button class="menu-toggle" aria-label="Открыть меню">
+                <img src="assets/icons/menu.png" alt="Меню" class="menu-icon">
+            </button>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Главная</a></li>
+                <li><a href="news.html">Новости</a></li>
+                <li><a href="reviews.html">Отзывы</a></li>
+                <li><a href="signup.html">Запись</a></li>
+                <li><a href="about.html">О нас</a></li>
+            </ul>
+            <ul class="auth-links">
+                <li><a href="register.html">Зарегистрироваться</a></li>
+                <li><a href="login.html">Войти</a></li>
+            </ul>
+        </nav>
+    </header>
+
+  <!-- Список новостей -->
+  <section class="news-section" style="margin:100px auto 60px; max-width:1200px; padding:0 20px;">
+    <h2 style="text-align:center; color:var(--primary-2); margin-bottom:40px;">Новости</h2>
+    <div id="news-container">
+      <p style="text-align:center; color:#777;">Загрузка новостей...</p>
+    </div>
+  </section>
+
+  <!-- Оверлей и контейнер модального окна -->
+  <div id="news-overlay" style="
+         display:none;
+         position:fixed; top:0; left:0;
+         width:100%; height:100%;
+         background:rgba(0,0,0,0.5);
+         z-index:2000;
+       "></div>
+  <div id="news-modal" style="
+         display:none;
+         position:fixed;
+         top:50%; left:50%;
+         transform:translate(-50%,-50%);
+         background:#fff;
+         border-radius:var(--border-radius);
+         max-width:90%;
+         max-height:90%;
+         overflow:auto;
+         padding:20px;
+         z-index:2001;
+       "></div>
+
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-logo-desc">
+        <img src="assets/images/footer-logo.png" alt="Логотип" class="footer-logo">
+        <p>Краткое описание вашего центра обучения.</p>
+      </div>
+      <div class="footer-links">
+                <a href="catalog.html">Каталог курсов</a>
+                <a href="schedule.html">Расписание</a>
+                <a href="signup.html">Запись</a>
+                <a href="about.html">О нас</a>
+                <a href="reviews.html">Отзывы</a>
+            </div>
+      <div class="footer-centers">
+        <h4>Учебные центры</h4>
+        <p>ул. Ульянова, 1</p>
+        <p>ул. Ульянова, 10а</p>
+        <p>ул. Челюскинцев, 9</p>
+      </div>
+    </div>
+    <hr>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 Все права защищены</div>
+      <div class="footer-policy">
+        <a href="agreement.php">Соглашение на обработку персональных данных</a>
+        <a href="privacy.php">Политика конфиденциальности</a>
+        <a href="edu-info.php">Сведения об образовательной организации</a>
+        <a href="payment-info.php">Информация об оплате</a>
+      </div>
+      <div class="footer-social">
+        <a href="https://vk.com" target="_blank"><i class="fab fa-vk"></i></a>
+        <a href="https://t.me" target="_blank"><i class="fab fa-telegram"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const container = document.getElementById('news-container');
+      const overlay   = document.getElementById('news-overlay');
+      const modal     = document.getElementById('news-modal');
+
+      fetch('http://localhost:8080/api/news')
+        .then(res => {
+          if (!res.ok) throw new Error('Ошибка сети');
+          return res.json();
+        })
+        .then(json => {
+          container.innerHTML = '';
+          const items = json.data || [];
+          if (items.length === 0) {
+            container.innerHTML = '<p style="text-align:center; color:#777;">Новостей нет.</p>';
+            return;
+          }
+          items.forEach(item => {
+            const block = document.createElement('div');
+            block.className = 'news-item';
+            block.style.cssText = `
+              display:flex;
+              align-items:flex-start;
+              gap:20px;
+              background:#fff;
+              border-radius:var(--border-radius);
+              box-shadow:0 2px 5px rgba(0,0,0,0.1);
+              padding:20px;
+              margin-bottom:20px;
+              cursor:pointer;
+              position:relative;
+            `;
+            block.innerHTML = `
+              <img src="${item.image}" alt="${item.title}" style="
+                width:150px;
+                height:auto;
+                border-radius:var(--border-radius);
+                flex-shrink:0;
+              ">
+              <div style="flex:1;">
+                <h3 style="margin:0 0 10px; color:var(--primary-3);">
+                  ${item.title}
+                </h3>
+                <p style="margin:0 0 10px; color:#555;">
+                  ${item.excerpt}
+                </p>
+                <span style="font-size:13px; color:var(--primary-3);">
+                  ${new Date(item.date).toLocaleDateString('ru-RU')}
+                </span>
+                <div class="news-full-content" style="display:none;">
+                  <img src="${item.image}" alt="${item.title}" style="
+                    width:100%;
+                    height:auto;
+                    border-radius:var(--border-radius);
+                    margin-bottom:15px;
+                  ">
+                  <h3 style="margin-bottom:15px; color:var(--primary-3);">
+                    ${item.title}
+                  </h3>
+                  <p style="margin-bottom:15px; color:#555; line-height:1.6;">
+                    ${item.text}
+                  </p>
+                  <span style="font-size:13px; color:var(--primary-3);">
+                    ${new Date(item.date).toLocaleDateString('ru-RU')}
+                  </span>
+                </div>
+              </div>
+            `;
+            block.addEventListener('click', () => {
+              modal.innerHTML = block.querySelector('.news-full-content').innerHTML;
+              overlay.style.display = 'block';
+              modal.style.display   = 'block';
+              document.body.style.overflow = 'hidden';
+            });
+            container.appendChild(block);
+          });
+          overlay.addEventListener('click', () => {
+            overlay.style.display = 'none';
+            modal.style.display   = 'none';
+            modal.innerHTML       = '';
+            document.body.style.overflow = '';
+          });
+        })
+        .catch(err => {
+          console.error(err);
+          container.innerHTML = '<p style="text-align:center; color:red;">Ошибка загрузки новостей.</p>';
+        });
+    });
+  </script>
+</body>
+</html>
+""")

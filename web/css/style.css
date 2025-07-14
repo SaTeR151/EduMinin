@@ -594,6 +594,7 @@ body {
 /* отступ сверху, чтобы заголовок «О компании» не скрывался под фикс. меню */
 .about-section {
   margin-top: 120px; /* подберите значение под высоту вашего header */
+  padding-bottom: 80px;
 }
 
 /* отступ вокруг блока курсов */
@@ -610,4 +611,181 @@ body {
 .courses-grid .course-card {
   flex: 0 0 200px;      /* фиксированная ширина */
   max-width: 200px;     /* раньше было 180px */
+}
+
+/* кнопка-тогглер */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--primary-3);
+  cursor: pointer;
+}
+
+/* мобильное поведение */
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block;
+  }
+  /* изначально прячем списки */
+  .main-nav .nav-links,
+  .main-nav .auth-links {
+    display: none;
+    flex-direction: column;
+    background: #fff;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    padding: 10px 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  /* при открытом меню показываем списки */
+  .main-nav.open .nav-links,
+  .main-nav.open .auth-links {
+    display: flex;
+  }
+  /* разделить секции навигации */
+  .main-nav.open .auth-links {
+    margin-top: 10px;
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+  }
+  /* ссылки по ширине и отступы */
+  .main-nav .nav-links li,
+  .main-nav .auth-links li {
+    margin: 8px 0;
+  }
+}
+
+/* Обязательную позицию для .main-nav, чтобы абсолютно позиционированное меню работало */
+/* общие стили */
+.main-nav {
+  position: relative; /* важно, чтобы позиционированные списки привячивались к nav */
+  z-index: 1000;
+}
+
+/* гамбургер-кнопка */
+.menu-toggle {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background: none;
+  border: none;
+  display: none;      /* скрыта на десктопе */
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1100;
+}
+.menu-icon {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+/* мобильные стили */
+@media (max-width: 768px) {
+  /* показываем кнопку */
+  .menu-toggle {
+    display: flex;
+  }
+
+  /* прячем оба списка */
+  .main-nav .nav-links,
+  .main-nav .auth-links {
+    display: none;
+    flex-direction: column;
+    background: #fff;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    z-index: 1050;
+  }
+
+  /* разделяем их визуально */
+  .main-nav .auth-links {
+    border-top: 1px solid #eee;
+    margin-top: 10px;
+    padding-top: 10px;
+  }
+
+  /* при наличии класса open на nav — показываем */
+  .main-nav.open .nav-links,
+  .main-nav.open .auth-links {
+    display: flex !important;
+  }
+
+  /* отступы между пунктами */
+  .main-nav .nav-links li,
+  .main-nav .auth-links li {
+    margin: 8px 0;
+  }
+}
+
+@media (max-width: 768px) {
+  /* nav-links поверх auth-links */
+  .main-nav .nav-links {
+    z-index: 1100;
+  }
+  .main-nav .auth-links {
+    z-index: 1050;
+  }
+}
+
+@media (max-width: 768px) {
+  /* при прокрутке шапки фон меню остаётся тёмным, 
+     поэтому в раскрытом меню ссылки должны быть тёмного цвета */
+  .site-header.scrolled .main-nav.open .nav-links a,
+  .site-header.scrolled .main-nav.open .auth-links a {
+    color: var(--primary-3) !important;
+  }
+}
+
+/* Адаптация секции hero для мобильных (≤768px) */
+@media (max-width: 768px) {
+  /* делаем отступ под фиксированное меню выше */
+  .hero {
+    margin: 100px auto 40px;
+  }
+
+  /* выводим контент статично, в колонку */
+  .hero-content {
+    position: static !important;
+    transform: none !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px 10px;
+  }
+
+  /* уменьшаем лого, даём отступ снизу */
+  .hero-logo {
+    max-width: 150px;
+    margin-bottom: 15px;
+  }
+
+  /* кнопки в колонку, центр, перенос */
+  .hero-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    width: 100%;
+  }
+
+  /* кнопки по ширине экрана, но с max-width */
+  .hero-button {
+    width: 100%;
+    max-width: 220px;
+    padding: 10px 0;
+    font-size: 14px;
+  }
 }

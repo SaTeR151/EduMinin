@@ -21,6 +21,7 @@ type SQLiteManagerDB interface {
 	SaveCourse(course dto.Course) error
 	DeleteCourse(id string) error
 	GetCourses(limit string) ([]dto.Course, error)
+	GetCoursesTitle() ([]dto.CoursesTitle, error)
 
 	SaveNews(news dto.News) error
 	DeleteNews(id string) error
@@ -29,6 +30,10 @@ type SQLiteManagerDB interface {
 	SaveReview(review dto.Reviews) error
 	DeleteReview(id string) error
 	GetReviews(limit string) ([]dto.Reviews, error)
+
+	SaveEvent(events dto.Events) error
+	DeleteEvent(id string) error
+	GetEvents(limit string) ([]dto.Events, error)
 }
 
 type SQLiteManager struct {
@@ -135,9 +140,28 @@ func (db *SQLiteManager) GetCourses(limit string) ([]dto.Course, error) {
 	return news, nil
 }
 
+func (db *SQLiteManager) GetCoursesTitle() ([]dto.CoursesTitle, error) {
+	rows, err := db.db.Query("SELECT title FROM courses")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var coursesTitle []dto.CoursesTitle
+	for rows.Next() {
+		var n dto.CoursesTitle
+		err := rows.Scan(&n.Title)
+		if err != nil {
+			return nil, err
+		}
+		coursesTitle = append(coursesTitle, n)
+	}
+	return coursesTitle, nil
+}
+
 func (db *SQLiteManager) SaveNews(news dto.News) error {
-	_, err := db.db.Exec("INSERT INTO news (title, content, date, image_path) values (:title, :content, :date, :image_path)",
+	_, err := db.db.Exec("INSERT INTO news (title, description, content, date, image_path) values (:title, :description, :content, :date, :image_path)",
 		sql.Named("title", news.Title),
+		sql.Named("description", news.Description),
 		sql.Named("content", news.Text),
 		sql.Named("date", news.Date),
 		sql.Named("image_path", news.Image),
@@ -158,7 +182,7 @@ func (db *SQLiteManager) DeleteNews(id string) error {
 }
 
 func (db *SQLiteManager) GetNews(limit string) ([]dto.News, error) {
-	query := "SELECT id, title, content, date, image_path image FROM news"
+	query := "SELECT id, title, description, content, date, image_path image FROM news"
 	if limit != "" {
 		query += fmt.Sprintf(" LIMIT %s", limit)
 	}
@@ -170,7 +194,7 @@ func (db *SQLiteManager) GetNews(limit string) ([]dto.News, error) {
 	var news []dto.News
 	for rows.Next() {
 		var n dto.News
-		err := rows.Scan(&n.Id, &n.Title, &n.Text, &n.Date, &n.Image)
+		err := rows.Scan(&n.Id, &n.Title, &n.Description, &n.Text, &n.Date, &n.Image)
 		if err != nil {
 			return nil, err
 		}
@@ -202,7 +226,7 @@ func (db *SQLiteManager) DeleteReview(id string) error {
 }
 
 func (db *SQLiteManager) GetReviews(limit string) ([]dto.Reviews, error) {
-	query := "SELECT id, author_name, date, review_text, photo_path image FROM reviews"
+	query := "SELECT id, author_name, date, review_text, photo_path FROM reviews"
 	if limit != "" {
 		query += fmt.Sprintf(" LIMIT %s", limit)
 	}
@@ -221,4 +245,48 @@ func (db *SQLiteManager) GetReviews(limit string) ([]dto.Reviews, error) {
 		reviews = append(reviews, r)
 	}
 	return reviews, nil
+}
+
+func (db *SQLiteManager) SaveEvent(events dto.Events) error {
+	_, err := db.db.Exec("INSERT INTO events (title, content, date, image_path) values (:title, :content, :date, :image_path)",
+		sql.Named("title", events.Title),
+		sql.Named("content", events.Text),
+		sql.Named("date", events.Date),
+		sql.Named("image_path", events.Image),
+	)
+	return err
+}
+
+func (db *SQLiteManager) DeleteEvent(id string) error {
+	res, err := db.db.Exec("DELETE FROM events WHERE id = :id", sql.Named("id", id))
+	rows, err := res.RowsAffected()
+	if err != nil {
+		return nil
+	}
+	if rows == 0 {
+		return apperror.ErrDataNotFound
+	}
+	return err
+}
+
+func (db *SQLiteManager) GetEvents(limit string) ([]dto.Events, error) {
+	query := "SELECT id, title, content, date, image_path image FROM events"
+	if limit != "" {
+		query += fmt.Sprintf(" LIMIT %s", limit)
+	}
+	rows, err := db.db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var events []dto.Events
+	for rows.Next() {
+		var n dto.Events
+		err := rows.Scan(&n.Id, &n.Title, &n.Text, &n.Date, &n.Image)
+		if err != nil {
+			return nil, err
+		}
+		events = append(events, n)
+	}
+	return events, nil
 }

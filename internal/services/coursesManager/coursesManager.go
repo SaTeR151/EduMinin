@@ -9,6 +9,7 @@ type CoursesManagerService interface {
 	GetCourses(limit string) ([]dto.Course, error)
 	DeleteCourse(id string) error
 	PostCourse(course dto.Course) error
+	GetCoursesTitle() ([]dto.CoursesTitle, error)
 }
 
 type CoursesManager struct {
@@ -32,4 +33,13 @@ func (cm *CoursesManager) DeleteCourse(id string) error {
 }
 func (cm *CoursesManager) PostCourse(course dto.Course) error {
 	return cm.db.SaveCourse(course)
+}
+
+func (cm *CoursesManager) GetCoursesTitle() ([]dto.CoursesTitle, error) {
+	var coursesTitle []dto.CoursesTitle
+	coursesTitle, err := cm.db.GetCoursesTitle()
+	if err != nil {
+		return nil, err
+	}
+	return coursesTitle, nil
 }

@@ -6,6 +6,9 @@ import (
 )
 
 type ReviewsManagerService interface {
+	GetReviews(limit string) ([]dto.Reviews, error)
+	DeleteReview(id string) error
+	PostReview(review dto.Reviews) error
 }
 
 type ReviewsManager struct {

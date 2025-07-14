@@ -17,12 +17,17 @@ type Course struct {
 	Image         string `json:"image"`
 }
 
-type News struct {
-	Id    string `json:"id"`
+type CoursesTitle struct {
 	Title string `json:"title"`
-	Text  string `json:"text"`
-	Date  string `json:"date"`
-	Image string `json:"image"`
+}
+
+type News struct {
+	Id          string `json:"id"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	Text        string `json:"text"`
+	Date        string `json:"date"`
+	Image       string `json:"image"`
 }
 
 type Reviews struct {
@@ -31,4 +36,12 @@ type Reviews struct {
 	Date   string `json:"date"`
 	Text   string `json:"text"`
 	Photo  string `json:"photo"`
+}
+
+type Events struct {
+	Id    string `json:"id"`
+	Title string `json:"title"`
+	Text  string `json:"text"`
+	Date  string `json:"date"`
+	Image string `json:"image"`
 }

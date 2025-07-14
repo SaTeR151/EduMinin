@@ -49,6 +49,25 @@ func GetCourses(services *services.Services) gin.HandlerFunc {
 	}
 }
 
+func GetCoursesTitle(services *services.Services) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		logrus.Info("getting courses title")
+		data, err := services.CoursesManager.GetCoursesTitle()
+		if err != nil {
+			logrus.Error(err)
+			c.AbortWithStatusJSON(http.StatusInternalServerError, dto.Error{Error: err.Error()})
+			return
+		}
+		if len(data) == 0 {
+			logrus.Warn(apperror.ErrDataNotFound)
+			c.AbortWithStatusJSON(http.StatusNotFound, dto.Error{Error: apperror.ErrDataNotFound.Error()})
+			return
+		}
+		c.AbortWithStatusJSON(http.StatusOK, dto.Data{Data: data})
+		logrus.Info("courses title sent")
+	}
+}
+
 func DeleteCourse(services *services.Services) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		logrus.Info("deleting course")

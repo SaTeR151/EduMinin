@@ -11,6 +11,7 @@ CREATE TABLE courses (
 CREATE TABLE news (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,               -- Заголовок новости
+    description TEXT,                  -- Описание
     content TEXT,                      -- Текст новости
     date TEXT(10) NOT NULL,            -- Дата (формат YYYY-MM-DD)
     image_path TEXT                    -- Путь к картинке
@@ -23,4 +24,12 @@ CREATE TABLE reviews (
     date TEXT(10) NOT NULL,            -- Дата (формат YYYY-MM-DD)
     review_text TEXT NOT NULL,         -- Текст отзыва
     photo_path TEXT                    -- Путь к фото
+);
+
+CREATE TABLE events (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,               -- Заголовок новости
+    content TEXT,                      -- Текст новости
+    date TEXT(10) NOT NULL,            -- Дата (формат YYYY-MM-DD)
+    image_path TEXT                    -- Путь к картинке
 );

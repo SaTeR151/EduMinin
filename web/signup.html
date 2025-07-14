@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -15,25 +14,28 @@
 <body>
   <!-- фиксированное верхнее меню -->
   <header class="site-header">
-    <nav class="main-nav">
-      <ul class="nav-links">
-        <li><a href="index.html">Главная</a></li>
-        <li><a href="news.html">Новости</a></li>
-        <li><a href="reviews.html">Отзывы</a></li>
-        <li><a href="signup.html" class="active">Запись</a></li>
-        <li><a href="about.html">О нас</a></li>
-      </ul>
-      <ul class="auth-links">
-        <li><a href="register.html">Зарегистрироваться</a></li>
-        <li><a href="login.html">Войти</a></li>
-      </ul>
-    </nav>
-  </header>
+        <nav class="main-nav">
+            <button class="menu-toggle" aria-label="Открыть меню">
+                <img src="assets/icons/menu.png" alt="Меню" class="menu-icon">
+            </button>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Главная</a></li>
+                <li><a href="news.html">Новости</a></li>
+                <li><a href="reviews.html">Отзывы</a></li>
+                <li><a href="signup.html">Запись</a></li>
+                <li><a href="about.html">О нас</a></li>
+            </ul>
+            <ul class="auth-links">
+                <li><a href="register.html">Зарегистрироваться</a></li>
+                <li><a href="login.html">Войти</a></li>
+            </ul>
+        </nav>
+    </header>
 
   <!-- Форма записи -->
   <section class="signup-section" style="margin:100px auto 60px; max-width:600px; padding:20px; background:#fff; border-radius:var(--border-radius); box-shadow:0 2px 5px rgba(0,0,0,0.1);">
     <h2 style="text-align:center; color:var(--primary-2); margin-bottom:20px;">Записаться на курс</h2>
-    <form action="submit_signup.html" method="post">
+    <form action="submit_signup.php" method="post">
       <div class="form-group" style="margin-bottom:15px;">
         <label for="fullname" style="display:block; margin-bottom:5px; font-weight:500;">ФИО</label>
         <input type="text" id="fullname" name="fullname" required
@@ -75,12 +77,12 @@
         <p>Краткое описание.</p>
       </div>
       <div class="footer-links">
-        <a href="catalog.html">Каталог курсов</a>
-        <a href="schedule.html">Расписание</a>
-        <a href="signup.html">Запись</a>
-        <a href="about.html">О нас</a>
-        <a href="reviews.html">Отзывы</a>
-      </div>
+                <a href="catalog.html">Каталог курсов</a>
+                <a href="schedule.html">Расписание</a>
+                <a href="signup.html">Запись</a>
+                <a href="about.html">О нас</a>
+                <a href="reviews.html">Отзывы</a>
+            </div>
       <div class="footer-centers">
         <h4>Учебные центры</h4>
         <p>ул. Ульянова, 1</p>

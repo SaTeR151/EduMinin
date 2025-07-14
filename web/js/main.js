@@ -1,5 +1,12 @@
 // main.js
 document.addEventListener('DOMContentLoaded', function() {
+    // toggle-меню на мобильных
+    const menuToggle = document.querySelector('.menu-toggle');
+    const mainNav   = document.querySelector('.main-nav');
+
+    menuToggle.addEventListener('click', () => {
+    mainNav.classList.toggle('open');
+});
     // Плавный скролл для якорных ссылок
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
