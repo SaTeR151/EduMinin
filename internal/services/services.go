@@ -2,6 +2,7 @@ package services
 
 import (
 	"github.com/SaTeR151/EduMinin/internal/database/sqlite"
+	authmanager "github.com/SaTeR151/EduMinin/internal/services/authManager"
 	coursesmanager "github.com/SaTeR151/EduMinin/internal/services/coursesManager"
 	eventsmanager "github.com/SaTeR151/EduMinin/internal/services/eventsManager"
 	newsmanager "github.com/SaTeR151/EduMinin/internal/services/newsManager"
@@ -13,6 +14,7 @@ type Services struct {
 	NewsManager    newsmanager.NewsManagerService
 	ReviewsManager reviewsmanager.ReviewsManagerService
 	CoursesManager coursesmanager.CoursesManagerService
+	AuthManager    authmanager.AuthManagerService
 }
 
 func New(db sqlite.SQLiteManagerDB) *Services {
@@ -21,5 +23,6 @@ func New(db sqlite.SQLiteManagerDB) *Services {
 	services.NewsManager = newsmanager.New(db)
 	services.ReviewsManager = reviewsmanager.New(db)
 	services.CoursesManager = coursesmanager.New(db)
+	services.AuthManager = authmanager.New(db)
 	return &services
 }

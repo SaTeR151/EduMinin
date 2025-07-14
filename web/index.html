@@ -1,21 +1,19 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Учебный центр — Главная</title>
-    <link rel="icon" type="image/png" href="assets/icons/favicon.png">
-    <!-- стили -->
-    <link rel="stylesheet" href="css/style.css">
-    <!-- иконки Font Awesome -->
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-          integrity="sha512-kuh6GZlN8YYNV3CFyraYszEEiQxhT1VgezjuV3zw+FfLMKktlK6KaO5y+6ZT+0IY68PfQWda+E3bfUhBru7W2g=="
-          crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Учебный центр — Главная</title>
+  <link rel="icon" type="image/png" href="assets/icons/favicon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-kuh6GZlN8YYNV3CFyraYszEEiQxhT1VgezjuV3zw+FfLMKktlK6KaO5y+6ZT+0IY68PfQWda+E3bfUhBru7W2g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-    <!-- Верхнее фиксированное меню -->
-    <header class="site-header">
+  <!-- Верхнее фиксированное меню -->
+  <header class="site-header">
         <nav class="main-nav">
             <button class="menu-toggle" aria-label="Открыть меню">
                 <img src="assets/icons/menu.png" alt="Меню" class="menu-icon">
@@ -34,106 +32,171 @@
         </nav>
     </header>
 
-    <!-- Шапка сайта с фоновым изображением -->
-    <section class="hero" id="hero">
-        <img src="assets/images/hero-bg.jpg" alt="Фон" class="hero-image">
-        <div class="hero-content">
-            <img src="assets/images/logo.png" alt="Логотип" class="hero-logo">
-            <nav class="hero-nav">
-                <a href="catalog.html" class="hero-button">Каталог курсов</a>
-                <a href="schedule.html" class="hero-button">Расписание</a>
-                <a href="centers.html" class="hero-button">Учебные центры</a>
-            </nav>
-        </div>
-    </section>
+  <!-- Шапка сайта -->
+  <section class="hero" id="hero">
+    <img src="assets/images/hero-bg.jpg" alt="Фон" class="hero-image">
+    <div class="hero-content">
+      <img src="assets/images/logo.png" alt="Логотип" class="hero-logo">
+      <nav class="hero-nav">
+        <a href="catalog.html" class="hero-button">Каталог курсов</a>
+        <a href="schedule.html" class="hero-button">Расписание</a>
+        <a href="contacts.html" class="hero-button">Учебные центры</a>
+      </nav>
+    </div>
+  </section>
 
-    <!-- Блок «Преимущества» -->
-    <section class="advantages" id="advantages">
-        <h2>Наши преимущества</h2>
-        <div class="advantages-container">
-            <div class="advantage-block">
-                <img src="assets/icons/free-schedule.png" alt="Свободный график" class="advantage-icon">
-                <h3>Свободный график без дедлайнов</h3>
-                <p>Обучение легко совмещать с работой и личной жизнью</p>
-            </div>
-            <div class="advantage-block">
-                <img src="assets/icons/unlimited-access.png" alt="Бессрочный доступ" class="advantage-icon">
-                <h3>Бессрочный доступ к курсам и их обновлениям</h3>
-                <p>Можно вернуться к занятиям и освежить знания в любой момент</p>
-            </div>
-            <div class="advantage-block">
-                <img src="assets/icons/online-lectures.png" alt="Онлайн-лекции" class="advantage-icon">
-                <h3>Доступ к онлайн-лекциям и практическим заданиям</h3>
-                <p>Дистанционное обучение с профессионалами</p>
-            </div>
-        </div>
-    </section>
+  <!-- Преимущества -->
+  <section class="advantages" id="advantages">
+    <h2>Наши преимущества</h2>
+    <div class="advantages-container">
+      <div class="advantage-block">
+        <img src="assets/icons/free-schedule.png" alt="Свободный график" class="advantage-icon">
+        <h3>Свободный график без дедлайнов</h3>
+        <p>Обучение легко совмещать с работой и личной жизнью</p>
+      </div>
+      <div class="advantage-block">
+        <img src="assets/icons/unlimited-access.png" alt="Бессрочный доступ" class="advantage-icon">
+        <h3>Бессрочный доступ к курсам</h3>
+        <p>Можно вернуться к занятиям и освежить знания в любой момент</p>
+      </div>
+      <div class="advantage-block">
+        <img src="assets/icons/online-lectures.png" alt="Онлайн-лекции" class="advantage-icon">
+        <h3>Онлайн-лекции и задания</h3>
+        <p>Дистанционное обучение с профессионалами</p>
+      </div>
+    </div>
+  </section>
 
-    <!-- Блок «Новости» с горизонтальным скроллом -->
-    <section class="news" id="news">
-        <h2>Последние новости</h2>
-        <div class="news-container">
-            
-        </div>
-    </section>
+  <!-- Новости ( AJAX ) -->
+  <section class="news" id="news">
+    <h2>Последние новости</h2>
+    <div class="news-container" id="news-container">
+      <p style="text-align:center; color:#777;">Загрузка новостей...</p>
+    </div>
+  </section>
 
-    <!-- Блок «Направления» -->
-    <section class="directions" id="catalog">
-        <h2>Наши направления</h2>
-        <div class="directions-container">
-            <div class="direction-block">
-                <img src="assets/icons/1c.png" alt="1С обучение" class="direction-icon">
-                <h3>1С обучение</h3>
-            </div>
-            <div class="direction-block">
-                <img src="assets/icons/python.png" alt="Python" class="direction-icon">
-                <h3>Python</h3>
-            </div>
-            <div class="direction-block">
-                <img src="assets/icons/cpp_csharp.png" alt="C++/C#" class="direction-icon">
-                <h3>C++/C#</h3>
-            </div>
-        </div>
-    </section>
+  <!-- Курсы ( AJAX ) -->
+  <section class="directions" id="catalog">
+    <h2>Наши курсы</h2>
+    <div class="directions-container" id="courses-container">
+      <p style="text-align:center; color:#777;">Загрузка курсов...</p>
+    </div>
+  </section>
 
-    <!-- Подвал сайта -->
-    <footer class="site-footer">
-        <div class="footer-top">
-            <div class="footer-logo-desc">
-                <img src="assets/images/footer-logo.png" alt="Логотип" class="footer-logo">
-                <p>Краткое описание</p>
-            </div>
-            <div class="footer-links">
+  <!-- Подвал -->
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-logo-desc">
+        <img src="assets/images/footer-logo.png" alt="Логотип" class="footer-logo">
+        <p>Краткое описание вашего центра обучения</p>
+      </div>
+      <div class="footer-links">
                 <a href="catalog.html">Каталог курсов</a>
                 <a href="schedule.html">Расписание</a>
                 <a href="signup.html">Запись</a>
                 <a href="about.html">О нас</a>
                 <a href="reviews.html">Отзывы</a>
             </div>
-            <div class="footer-centers" id="centers">
-                <h4>Учебные центры</h4>
-                <p>ул. Ульянова, 1</p>
-                <p>ул. Ульянова, 10а</p>
-                <p>ул. Челюскинцев, 9</p>
-            </div>
-        </div>
-        <hr>
-        <div class="footer-bottom">
-            <div class="footer-copy">© 2025 Все права защищены</div>
-            <div class="footer-policy">
-                <a href="docs/Соглашение на обработку персональных данных.pdf">Соглашение на обработку персональных данных</a>
-                <a href="docs/Политика конфиденциальности.pdf">Политика конфиденциальности</a>
-                <a href="docs/Сведения об образовательной организации.pdf">Сведения об образовательной организации</a>
-                <a href="docs/Информация об оплате.pdf">Информация об оплате</a>
-            </div>
-            <div class="footer-social">
-                <a href="https://vk.com" target="_blank"><i class="fab fa-vk"></i></a>
-                <a href="https://t.me" target="_blank"><i class="fab fa-telegram"></i></a>
-            </div>
-        </div>
-    </footer>
+      <div class="footer-centers">
+        <h4>Учебные центры</h4>
+        <p>ул. Ульянова, 1</p>
+        <p>ул. Ульянова, 10а</p>
+        <p>ул. Челюскинцев, 9</p>
+      </div>
+    </div>
+    <hr>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 Все права защищены</div>
+      <div class="footer-policy">
+        <a href="agreement.html">Соглашение на обработку данных</a>
+        <a href="privacy.html">Политика конфиденциальности</a>
+        <a href="edu-info.html">Сведения об организации</a>
+        <a href="payment-info.html">Информация об оплате</a>
+      </div>
+      <div class="footer-social">
+        <a href="https://vk.com" target="_blank"><i class="fab fa-vk"></i></a>
+        <a href="https://t.me" target="_blank"><i class="fab fa-telegram"></i></a>
+      </div>
+    </div>
+  </footer>
 
-    <!-- скрипты -->
-    <script src="js/main.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+document.addEventListener('DOMContentLoaded', function() {
+  const newsWrap   = document.getElementById('news-container');
+  const courseWrap = document.getElementById('courses-container');
+
+  // 1) Подгружаем все новости, сортируем по дате и берём 5 последних
+  fetch('http://localhost:8080/api/news')
+    .then(r => {
+      if (!r.ok) throw new Error('Ошибка сети при загрузке новостей');
+      return r.json();
+    })
+    .then(json => {
+      let news = json.data || [];
+      // сортировка по дате (новые — в начале)
+      news.sort((a, b) => new Date(b.date) - new Date(a.date));
+      news = news.slice(0, 5);
+
+      newsWrap.innerHTML = '';
+      if (news.length === 0) {
+        newsWrap.innerHTML = '<p style="text-align:center;color:#777;">Новостей нет</p>';
+        return;
+      }
+      news.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'news-item';
+        div.innerHTML = `
+          <div class="news-img-container">
+            <img src="${item.image}" alt="${item.title}" class="news-img">
+            <div class="news-img-fade"></div>
+          </div>
+          <div class="news-text">
+            <h3>${item.title}</h3>
+            <p>${item.text}</p>
+          </div>`;
+        newsWrap.appendChild(div);
+      });
+    })
+    .catch(err => {
+      console.error(err);
+      newsWrap.innerHTML = '<p style="text-align:center;color:red;">Ошибка загрузки новостей</p>';
+    });
+
+  // 2) Подгружаем все курсы, перемешиваем и берём 5 случайных
+  fetch('http://localhost:8080/api/courses')
+    .then(r => {
+      if (!r.ok) throw new Error('Ошибка сети при загрузке курсов');
+      return r.json();
+    })
+    .then(json => {
+      let courses = json.data || [];
+      // фишер-йейтс для рандома
+      for (let i = courses.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [courses[i], courses[j]] = [courses[j], courses[i]];
+      }
+      courses = courses.slice(0, 5);
+
+      courseWrap.innerHTML = '';
+      if (courses.length === 0) {
+        courseWrap.innerHTML = '<p style="text-align:center;color:#777;">Курсов нет</p>';
+        return;
+      }
+      courses.forEach(course => {
+        const div = document.createElement('div');
+        div.className = 'direction-block';
+        div.innerHTML = `
+          <img src="${course.image}" alt="${course.title}" class="direction-icon">
+          <h3>${course.title}</h3>`;
+        courseWrap.appendChild(div);
+      });
+    })
+    .catch(err => {
+      console.error(err);
+      courseWrap.innerHTML = '<p style="text-align:center;color:red;">Ошибка загрузки курсов</p>';
+    });
+});
+</script>
 </body>
 </html>
