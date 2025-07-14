@@ -1,4 +1,27 @@
 ## Созданные ендпониты:
+# Новости news:
+1. /api/news [GET] - получение списка новостей
+{
+  "data":[
+  {
+    Id    string `json:"id"`
+  	Title string `json:"title"`
+  	Text  string `json:"text"`
+  	Date  string `json:"date"`
+  	Image string `json:"image"`
+   },
+   {
+    Id    string `json:"id"`
+  	Title string `json:"title"`
+  	Text  string `json:"text"`
+  	Date  string `json:"date"`
+  	Image string `json:"image"`
+   },
+   ]
+}
+
+
+
 1. /api/events [POST] для добавления мероприятий
 2. /api/events [DELETE] для удаления меропариятия
 3. /api/events [GET] для получения всех мероприятий
