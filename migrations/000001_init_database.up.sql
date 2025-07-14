@@ -33,3 +33,22 @@ CREATE TABLE events (
     date TEXT(10) NOT NULL,            -- Дата (формат YYYY-MM-DD)
     image_path TEXT                    -- Путь к картинке
 );
+
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    login INTEGER AUTOINCREMENT UNIQUE,       
+    pass TEXT                     
+);
+
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    login INTEGER UNIQUE,       
+    pass TEXT                     
+);
+
+CREATE TABLE auth(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    login INTEGER UNIQUE,   
+    refresh_token TEXT,
+    FOREIGN KEY (login) REFERENCES users(login) ON DELETE CASCADE
+);

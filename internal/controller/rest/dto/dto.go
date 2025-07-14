@@ -45,3 +45,8 @@ type Events struct {
 	Date  string `json:"date"`
 	Image string `json:"image"`
 }
+
+type UserData struct {
+	Login string `json:"login"`
+	Pass  string `json:"pass"`
+}
