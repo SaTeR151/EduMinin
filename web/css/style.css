@@ -1,0 +1,613 @@
+/* style.css */
+:root {
+  /* Основные цвета */
+  --primary-1: #0A64A4;
+  --primary-2: #24577B;
+  --primary-3: #03406A;
+  --primary-4: #3E94D1;
+  --primary-5: #65A5D1;
+
+  /* Вторичный цвет A */
+  --secondaryA-1: #1B1BB3;
+  --secondaryA-2: #313186;
+  --secondaryA-3: #090974;
+  --secondaryA-4: #4F4FD9;
+  --secondaryA-5: #7373D9;
+
+  /* Вторичный цвет B */
+  --secondaryB-1: #00B25C;
+  --secondaryB-2: #218555;
+  --secondaryB-3: #00733C;
+  --secondaryB-4: #36D88A;
+  --secondaryB-5: #61D89F;
+
+  --border-radius: 12px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f9f9f9;
+  color: #333;
+}
+
+/* --- Header & Nav --- */
+.site-header {
+  position: fixed;
+  top: 0; width: 100%;
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  z-index: 1000;
+  transition: background 0.3s;
+}
+.site-header.scrolled {
+  background: var(--primary-5);
+}
+.main-nav {
+  max-width: 1200px;
+  margin: auto;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.nav-links, .auth-links {
+  list-style: none;
+  display: flex;
+}
+.nav-links li, .auth-links li {
+  margin-right: 20px;
+}
+.nav-links li:last-child, .auth-links li:last-child {
+  margin-right: 0;
+}
+.main-nav a {
+  text-decoration: none;
+  color: var(--primary-3);
+  font-weight: 500;
+  transition: color 0.3s;
+}
+.site-header.scrolled .main-nav a {
+  color: #fff;
+}
+.main-nav a:hover {
+  color: var(--primary-1);
+}
+.main-nav .active {
+  color: var(--primary-1);
+}
+
+/* --- Hero --- */
+.hero {
+  margin: 70px auto 40px;
+  max-width: 1200px;
+  position: relative;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+.hero-image {
+  width: 100%;
+  display: block;
+}
+.hero-content {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+}
+
+/* Логотип не растягивается */
+.hero-logo {
+  max-width: 200px;
+  flex: 0 0 auto;
+}
+
+/* Навигация растягивается на всю оставшуюся ширину и центрирует кнопки */
+.hero-nav {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.hero-button {
+  display: inline-block;
+  width: 200px;
+  padding: 15px;
+  border-radius: 50px;
+  background: var(--secondaryA-4);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  text-align: center;
+  transition: background 0.3s;
+}
+.hero-button:hover {
+  background: var(--secondaryA-1);
+}
+
+/* --- Преимущества --- */
+.advantages, .news, .directions {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+.advantages h2, .news h2, .directions h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: var(--primary-2);
+}
+.advantages-container, .directions-container {
+  display: flex;
+  gap: 20px;
+}
+.advantage-block, .direction-block {
+  flex: 1;
+  background: #fff;
+  border-radius: var(--border-radius);
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+./* Иконки-картинки для Преимуществ */
+.advantage-icon {
+  display: block;         /* чтобы центрировалось */
+  width: 60px;            /* или любой другой размер */
+  height: auto;
+  margin: 0 auto 15px;    /* центр по горизонтали + отступ снизу */
+}
+
+/* Иконки-картинки для Направлений */
+.direction-icon {
+  display: block;
+  width: 60px;            /* тот же размер, чтобы было единообразно */
+  height: auto;
+  margin: 0 auto 15px;
+
+}
+.advantage-block h3, .direction-block h3 {
+  margin-bottom: 10px;
+  color: var(--primary-3);
+}
+.advantage-block p {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.4;
+}
+
+.advantage-block .advantage-icon,
+.direction-block .direction-icon {
+  width: 60px !important;
+  height: auto !important;
+  display: block;
+  margin: 0 auto 15px; /* центрируем и сохраняем отступ */
+}
+
+/* --- Новости --- */
+.news-container {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+.news-item {
+  flex-shrink: 0;
+  min-width: 300px;
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+  border-radius: var(--border-radius);
+  position: relative;
+}
+.news-text {
+  position: absolute;
+  left: 15px; right: 15px; bottom: 15px;
+  background: rgba(0,0,0,0.5);
+  padding: 10px;
+  border-radius: var(--border-radius);
+  color: #fff;
+}
+.news-text h3 {
+  margin-bottom: 5px;
+  font-size: 18px;
+}
+.news-text p {
+  font-size: 14px;
+}
+
+/* --- Подвал --- */
+.site-footer {
+  background: var(--primary-3);
+  color: #fff;
+  padding: 40px 20px;
+  font-size: 14px;
+}
+.footer-top {
+  max-width: 1200px;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.footer-logo-desc {
+  max-width: 200px;
+  margin-bottom: 20px;
+}
+.footer-logo {
+  width: 70%;
+  max-width: 150px;
+  margin-bottom: 10px;
+}
+.footer-links, .footer-centers {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+.footer-links a, .footer-centers p, .footer-centers h4 {
+  color: #fff;
+  text-decoration: none;
+  margin-bottom: 10px;
+}
+.footer-centers h4 {
+  margin-bottom: 10px;
+}
+.footer-links a:hover, .footer-centers p:hover {
+  text-decoration: underline;
+}
+.site-footer hr {
+  border: 0;
+  border-top: 1px solid rgba(255,255,255,0.2);
+  margin: 20px 0;
+}
+.footer-bottom {
+  max-width: 1200px;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer-copy { }
+.footer-policy {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+.footer-policy a {
+  color: #fff;
+  text-decoration: none;
+}
+.footer-policy a:hover {
+  text-decoration: underline;
+}
+.footer-social a {
+  color: #fff;
+  font-size: 20px;
+  margin-left: 15px;
+}
+.footer-social a:first-child {
+  margin-left: 0;
+}
+
+/* --- Адаптив --- */
+@media (max-width: 768px) {
+  .main-nav { flex-direction: column; }
+  .nav-links, .auth-links { flex-direction: column; }
+  .advantages-container, .directions-container { flex-direction: column; }
+  .footer-top, .footer-bottom { flex-direction: column; align-items: flex-start; }
+  .footer-policy, .footer-social { margin-top: 10px; }
+}
+
+/* Эффект увеличения блоков при наведении */
+.advantage-block,
+.direction-block {
+  transition: transform 0.3s ease;
+  transform-origin: center center;
+}
+
+.advantage-block:hover,
+.direction-block:hover {
+  transform: scale(1.05);
+}
+
+/* Ссылки в footer-policy — столбиком */
+.footer-policy {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start;
+  gap: 8px; /* расстояние между ссылками */
+}
+
+.footer-policy a {
+  display: block;
+  margin: 0; /* сброс внешних отступов, если были */
+}
+
+/* --- Горизонтальные широкие карточки команды, один под другим --- */
+.team {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.team-member {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.team-member:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.team-avatar {
+  flex: 0 0 120px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 20px;
+}
+
+.team-info {
+  flex: 1;
+}
+
+.team-info h4 {
+  margin: 0 0 5px;
+  color: var(--primary-3);
+}
+
+.team-role {
+  margin: 0 0 10px;
+  font-size: 14px;
+  color: var(--secondaryA-3);
+}
+
+.team-desc {
+  margin: 0 0 15px;
+  font-size: 13px;
+  color: #555;
+  line-height: 1.4;
+}
+
+.team-link {
+  display: inline-flex;
+  align-items: center;
+  font-size: 14px;
+  color: var(--secondaryA-4);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.team-link i {
+  margin-right: 6px;
+}
+
+.team-link:hover {
+  color: var(--secondaryA-1);
+}
+
+/* Адаптив: на узких экранах — вертикально */
+@media (max-width: 600px) {
+  .team-member {
+    flex-direction: column;
+    text-align: center;
+  }
+  .team-avatar {
+    margin: 0 0 15px;
+  }
+  .team-info {
+    width: 100%;
+  }
+}
+
+/* — Блок «О компании» — */
+.about-intro {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 40px;
+}
+.about-title {
+  font-size: 2.5rem;
+  color: var(--primary-2);
+  margin-bottom: 10px;
+}
+.about-text {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #555;
+  margin-bottom: 25px;
+}
+
+/* — Курсы — */
+.section-subtitle {
+  text-align: center;
+  font-size: 1.8rem;
+  color: var(--primary-3);
+  margin-bottom: 20px;
+}
+.courses-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+.course-card {
+  background: #fff;
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 20px;
+  max-width: 180px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.course-card:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+.course-icon {
+  width: 40px;
+  height: auto;
+  margin-bottom: 12px;
+}
+.course-card h4 {
+  font-size: 1.1rem;
+  color: var(--primary-2);
+  margin-bottom: 8px;
+}
+.course-card p {
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.4;
+}
+
+/* — Направления — */
+.directions-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 10px;
+}
+.direction-item {
+  background: var(--primary-5);
+  color: #fff;
+  border-radius: var(--border-radius);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: background 0.3s ease;
+}
+.direction-item:hover {
+  background: var(--primary-4);
+}
+.direction-icon {
+  width: 24px;
+  height: auto;
+}
+.direction-item span {
+  font-size: 0.9rem;
+}
+
+/* — Адаптив — */
+@media (max-width: 768px) {
+  .about-stats { flex-direction: column; gap: 20px; }
+  .courses-grid, .directions-grid { flex-direction: column; align-items: center; }
+}
+
+/* --- Секция команды в about.php --- */
+.team-section {
+  max-width: 800px;
+  margin: 60px auto;
+  padding: 0 20px;
+}
+.team-section .section-subtitle {
+  text-align: center;
+  color: var(--primary-2);
+  margin-bottom: 30px;
+}
+.team {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+.team-member {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 20px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.team-member:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+.team-avatar {
+  flex: 0 0 120px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 20px;
+}
+.team-info h4 {
+  margin: 0 0 5px;
+  color: var(--primary-3);
+}
+.team-role {
+  margin: 0 0 10px;
+  font-size: 14px;
+  color: var(--secondaryA-3);
+}
+.team-desc {
+  margin: 0 0 15px;
+  font-size: 13px;
+  color: #555;
+  line-height: 1.4;
+}
+.team-link {
+  display: inline-flex;
+  align-items: center;
+  font-size: 14px;
+  color: var(--secondaryA-4);
+  text-decoration: none;
+  font-weight: 500;
+}
+.team-link i {
+  margin-right: 6px;
+}
+.team-link:hover {
+  color: var(--secondaryA-1);
+}
+
+/* Адаптив для узких экранов */
+@media (max-width: 600px) {
+  .team-member {
+    flex-direction: column;
+    text-align: center;
+  }
+  .team-avatar {
+    margin: 0 0 15px;
+  }
+}
+
+/* отступ сверху, чтобы заголовок «О компании» не скрывался под фикс. меню */
+.about-section {
+  margin-top: 120px; /* подберите значение под высоту вашего header */
+}
+
+/* отступ вокруг блока курсов */
+.about-courses {
+  margin-top: 40px;
+  margin-bottom: 60px;
+}
+
+/* дополнительный отступ перед направлениями */
+.about-directions {
+  margin-top: 40px;
+}
+
+.courses-grid .course-card {
+  flex: 0 0 200px;      /* фиксированная ширина */
+  max-width: 200px;     /* раньше было 180px */
+}

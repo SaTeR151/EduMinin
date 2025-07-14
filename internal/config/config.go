@@ -12,7 +12,7 @@ type ServerConfig struct {
 }
 
 type SQLiteConfig struct {
-	DBFilePath string
+	DBFileName string
 }
 
 func GetServerConfig() ServerConfig {
@@ -32,9 +32,9 @@ func GetServerConfig() ServerConfig {
 func GetSQLiteConfig() SQLiteConfig {
 	var sqliteConfig SQLiteConfig
 	var ok bool
-	sqliteConfig.DBFilePath, ok = os.LookupEnv("SQLITEFILEPATH")
+	sqliteConfig.DBFileName, ok = os.LookupEnv("SQLITEDBFILENAME")
 	if !ok {
-		logrus.Warn("sqlite file path not found")
+		logrus.Warn("sqlite file name not found")
 	}
 	return sqliteConfig
 }
