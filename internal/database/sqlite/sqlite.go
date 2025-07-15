@@ -34,6 +34,14 @@ type SQLiteManagerDB interface {
 	SaveEvent(events dto.Events) error
 	DeleteEvent(id string) error
 	GetEvents(limit string) ([]dto.Events, error)
+
+	CheckUsersLoginExists(login string) error
+	RegisterUser(login string, pass string) error
+
+	CheckUserAuthorization(login string) error
+	DeleteAuthorizationUser(login string) error
+	GetUserInfo(login string) (oldLogin string, oldPass string, err error)
+	Signup(login string, rt string) error
 }
 
 type SQLiteManager struct {
@@ -259,6 +267,9 @@ func (db *SQLiteManager) SaveEvent(events dto.Events) error {
 
 func (db *SQLiteManager) DeleteEvent(id string) error {
 	res, err := db.db.Exec("DELETE FROM events WHERE id = :id", sql.Named("id", id))
+	if err != nil {
+		return nil
+	}
 	rows, err := res.RowsAffected()
 	if err != nil {
 		return nil
@@ -270,7 +281,7 @@ func (db *SQLiteManager) DeleteEvent(id string) error {
 }
 
 func (db *SQLiteManager) GetEvents(limit string) ([]dto.Events, error) {
-	query := "SELECT id, title, content, date, image_path image FROM events"
+	query := "SELECT id, title, content, date, image_path FROM events"
 	if limit != "" {
 		query += fmt.Sprintf(" LIMIT %s", limit)
 	}
@@ -289,4 +300,89 @@ func (db *SQLiteManager) GetEvents(limit string) ([]dto.Events, error) {
 		events = append(events, n)
 	}
 	return events, nil
+}
+
+func (db *SQLiteManager) CheckUsersLoginExists(login string) error {
+	rows, err := db.db.Query("SELECT count(login) count FROM users WHERE login = :login", sql.Named("login", login))
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+	var count int
+	if rows.Next() {
+		err := rows.Scan(&count)
+		if err != nil {
+			return nil
+		}
+	}
+	if count == 0 {
+		return apperror.ErrUncorrectData
+	}
+	return nil
+}
+
+func (db *SQLiteManager) RegisterUser(login string, pass string) error {
+	_, err := db.db.Exec("INSERT INTO users (login, pass) values (:login, :pass)",
+		sql.Named("login", login),
+		sql.Named("pass", pass),
+	)
+	if err != nil {
+		return apperror.ErrUserAlreadyExists
+	}
+	return nil
+}
+
+func (db *SQLiteManager) CheckUserAuthorization(login string) error {
+	res, err := db.db.Exec("SELECT login FROM auth WHERE login = :login", sql.Named("login", login))
+	if err != nil {
+		return err
+	}
+	rows, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if rows != 0 {
+		return apperror.ErrUserAlreadyAuthorization
+	}
+	return nil
+}
+
+func (db *SQLiteManager) DeleteAuthorizationUser(login string) error {
+	res, err := db.db.Exec("DELETE FROM auth WHERE login = :login", sql.Named("login", login))
+	if err != nil {
+		return nil
+	}
+	rows, err := res.RowsAffected()
+	if err != nil {
+		return nil
+	}
+	if rows == 0 {
+		return apperror.ErrUserNotFound
+	}
+	return err
+}
+
+func (db *SQLiteManager) GetUserInfo(login string) (oldLogin string, oldPass string, err error) {
+	rows, err := db.db.Query("SELECT login, pass FROM users WHERE login = :login", sql.Named("login", login))
+	if err != nil {
+		return oldLogin, oldPass, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		err := rows.Scan(&oldLogin, &oldPass)
+		if err != nil {
+			return oldLogin, oldPass, err
+
+		}
+	}
+	return oldLogin, oldPass, err
+
+}
+
+func (db *SQLiteManager) Signup(login string, rt string) error {
+	_, err := db.db.Exec("INSERT INTO auth (login, refresh_token) values (:login, :refresh_token)",
+		sql.Named("login", login),
+		sql.Named("refresh_token", rt),
+	)
+	return err
 }

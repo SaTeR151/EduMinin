@@ -47,6 +47,10 @@ type Events struct {
 }
 
 type UserData struct {
-	Login string `json:"login"`
-	Pass  string `json:"pass"`
+	Login string `json:"username"`
+	Pass  string `json:"password"`
+}
+
+type Message struct {
+	Message string
 }

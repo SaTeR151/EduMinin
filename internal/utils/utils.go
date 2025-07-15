@@ -26,7 +26,7 @@ func CreateLink() (string, error) {
 	return string(tokenLink), nil
 }
 
-func NewTokens(userAgent string, guid string) (aToken string, rToken string, err error) {
+func NewTokens(userAgent string, login string) (aToken string, rToken string, err error) {
 	tokenLink, err := CreateLink()
 	if err != nil {
 		return aToken, rToken, err
@@ -40,7 +40,7 @@ func NewTokens(userAgent string, guid string) (aToken string, rToken string, err
 	claims := &jwt.MapClaims{
 		"exp":        time.Now().Add(time.Second * time.Duration(atTimeExp)).Unix(),
 		"userAgent":  userAgent,
-		"guid":       guid,
+		"login":      login,
 		"linkString": tokenLink,
 	}
 	accessToken := jwt.NewWithClaims(jwt.SigningMethodHS512, claims)
@@ -55,7 +55,7 @@ func NewTokens(userAgent string, guid string) (aToken string, rToken string, err
 	return aToken, rToken, nil
 }
 
-func GetGUIDFromJWT(aToken string) (string, error) {
+func GetLoginFromJWT(aToken string) (string, error) {
 	claims := jwt.MapClaims{}
 	_, err := jwt.ParseWithClaims(aToken, claims, func(t *jwt.Token) (interface{}, error) {
 		return []byte(os.Getenv("JWT_SECRET")), nil
