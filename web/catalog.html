@@ -10,6 +10,26 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         integrity="sha512-kuh6GZlN8YYNV3CFyraYszEEiQxhT1VgezjuV3zw+FfLMKktlK6KaO5y+6ZT+0IY68PfQWda+E3bfUhBru7W2g=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    /* 1) Задаём body и html на всю высоту */
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+    /* 2) Flex-контейнер по вертикали */
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+    /* 3) Основной контент растягивается */
+    main {
+      flex: 1 0 auto;
+    }
+    /* 4) Футер прижат снизу */
+    .site-footer {
+      margin-top: auto;
+    }
+  </style>
 </head>
 <body>
   <!-- фиксированное верхнее меню -->
@@ -31,7 +51,7 @@
             </ul>
         </nav>
     </header>
-
+  <main>
   <!-- Каталог курсов -->
   <section class="catalog-section" style="margin:100px auto 60px; max-width:1200px; padding:0 20px;">
     <h2 style="text-align:center; color:var(--primary-2); margin-bottom:40px;">Каталог курсов</h2>
@@ -40,7 +60,7 @@
       <p style="text-align:center; color:#777;">Загрузка курсов...</p>
     </div>
   </section>
-
+  </main>
   <!-- подвал -->
   <footer class="site-footer">
     <div class="footer-top">

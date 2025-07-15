@@ -3,13 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Войти — Учебный центр</title>
+  <title>Учебные центры — Учебный центр</title>
   <link rel="icon" type="image/png" href="assets/icons/favicon.png">
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-        integrity="sha512-kuh6GZlN8YYNV3CFyraYszEEiQxhT1VgezjuV3zw+FfLMKktlK6KaO5y+6ZT+0IY68PfQWda+E3bfUhBru7W2g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     /* 1) Задаём body и html на всю высоту */
     html, body {
@@ -51,38 +47,96 @@
             </ul>
         </nav>
     </header>
-  <main>
-  <!-- Форма входа (AJAX) -->
-<section class="login-section"
-         style="margin:100px auto 60px;
-                max-width:500px;
-                padding:20px;
-                background:#fff;
-                border-radius:var(--border-radius);
-                box-shadow:0 2px 5px rgba(0,0,0,0.1);">
-  <h2 style="text-align:center;
-             color:var(--primary-2);
-             margin-bottom:20px;">
-    Войти в личный кабинет
-  </h2>
-  <form id="login-form">
-    <div class="form-group" style="margin-bottom:15px;">
-      <label for="login-username" style="display:block; margin-bottom:5px; font-weight:500;">Логин</label>
-      <input type="text" id="login-username" name="username" required
-             style="width:100%; padding:10px; border:1px solid #ccc; border-radius:var(--border-radius);">
+    <main>
+  <!-- Раздел учебных центров -->
+  <section class="centers-section" style="margin:100px auto 60px; max-width:1500px; padding:0 20px;">
+    <h2 style="text-align:center; color:var(--primary-2); margin-bottom:40px;">Наши учебные центры</h2>
+    <div class="centers-container" style="display:flex; gap:20px; flex-wrap:wrap; justify-content:center;">
+      <!-- Центр 1 -->
+      <div class="center-block" style="
+            position:relative;
+            flex:0 0 438px;        /* 350px * 1.25 */
+            height:358px;          /* 250px * 1.25 */
+            background-image:url('assets/images/center1.jpg');
+            background-size:cover;
+            background-position:center;
+            border-radius:var(--border-radius);
+            overflow:hidden;
+            box-shadow:0 2px 5px rgba(0,0,0,0.1);
+      ">
+        <div class="center-overlay" style="
+              position:absolute;
+              bottom:0; left:0; right:0;
+              height:80px;
+              background:linear-gradient(transparent, rgba(0,0,0,0.7));
+        "></div>
+        <div class="center-info" style="
+              position:absolute;
+              bottom:10px; left:15px; right:15px;
+              color:#fff;
+            ">
+          <h3 class="center-title" style="margin:0 0 5px; font-size:1.25rem;">НГПУ им. Козьмы Минина</h3>
+          <p class="center-address" style="margin:0; font-size:0.9rem;">ул. Ульянова, 1</p>
+        </div>
+      </div>
+
+      <!-- Центр 2 -->
+      <div class="center-block" style="
+            position:relative;
+            flex:0 0 438px;
+            height:358px;
+            background-image:url('assets/images/center2.jpg');
+            background-size:cover;
+            background-position:center;
+            border-radius:var(--border-radius);
+            overflow:hidden;
+            box-shadow:0 2px 5px rgba(0,0,0,0.1);
+      ">
+        <div class="center-overlay" style="
+              position:absolute;
+              bottom:0; left:0; right:0;
+              height:80px;
+              background:linear-gradient(transparent, rgba(0,0,0,0.7));
+        "></div>
+        <div class="center-info" style="
+              position:absolute;
+              bottom:10px; left:15px; right:15px;
+              color:#fff;
+            ">
+          <h3 class="center-title" style="margin:0 0 5px; font-size:1.25rem;">Апрель Софт</h3>
+          <p class="center-address" style="margin:0; font-size:0.9rem;">ул. Ульянова, 10а</p>
+        </div>
+      </div>
+
+      <!-- Центр 3 -->
+      <div class="center-block" style="
+            position:relative;
+            flex:0 0 438px;
+            height:358px;
+            background-image:url('assets/images/center3.jpg');
+            background-size:cover;
+            background-position:center;
+            border-radius:var(--border-radius);
+            overflow:hidden;
+            box-shadow:0 2px 5px rgba(0,0,0,0.1);
+      ">
+        <div class="center-overlay" style="
+              position:absolute;
+              bottom:0; left:0; right:0;
+              height:80px;
+              background:linear-gradient(transparent, rgba(0,0,0,0.7));
+        "></div>
+        <div class="center-info" style="
+              position:absolute;
+              bottom:10px; left:15px; right:15px;
+              color:#fff;
+            ">
+          <h3 class="center-title" style="margin:0 0 5px; font-size:1.25rem;">Кванториум</h3>
+          <p class="center-address" style="margin:0; font-size:0.9rem;">ул. Челюскинцев, 9</p>
+        </div>
+      </div>
     </div>
-    <div class="form-group" style="margin-bottom:25px;">
-      <label for="login-password" style="display:block; margin-bottom:5px; font-weight:500;">Пароль</label>
-      <input type="password" id="login-password" name="password" required
-             style="width:100%; padding:10px; border:1px solid #ccc; border-radius:var(--border-radius);">
-    </div>
-    <button type="submit"
-            style="width:100%; padding:15px; border:none; border-radius:var(--border-radius); background:var(--secondaryB-1); color:#fff; font-size:16px; font-weight:600; cursor:pointer; transition:background 0.3s;">
-      Войти
-    </button>
-  </form>
-  <div id="login-message" style="text-align:center; margin-top:15px;"></div>
-</section>
+  </section>
   </main>
   <!-- Подвал -->
   <footer class="site-footer">
@@ -123,45 +177,5 @@
   </footer>
 
   <script src="js/main.js"></script>
-  <script>
-document.addEventListener('DOMContentLoaded', () => {
-  const form  = document.getElementById('login-form');
-  const msgEl = document.getElementById('login-message');
-
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    msgEl.textContent = '';
-
-    const payload = {
-      username: document.getElementById('login-username').value.trim(),
-      password: document.getElementById('login-password').value
-    };
-
-    fetch('http://localhost:8080/api/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    })
-    .then(res => {
-      if (!res.ok) {
-        if (res.status === 401) throw new Error('Неверный логин или пароль');
-        throw new Error('Сервер вернул ошибку ' + res.status);
-      }
-      return res.json();
-    })
-    .then(json => {
-      msgEl.style.color = '#28a745';
-      msgEl.textContent = json.message || 'Успешный вход!';
-      // При необходимости перенаправляем:
-      // window.location.href = '/dashboard.php';
-    })
-    .catch(err => {
-      console.error(err);
-      msgEl.style.color = '#d9534f';
-      msgEl.textContent = err.message;
-    });
-  });
-});
-</script>
 </body>
 </html>
