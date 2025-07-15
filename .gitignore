@@ -1,1 +1,2 @@
 ./.gitignor
+cmd/app/data.db
