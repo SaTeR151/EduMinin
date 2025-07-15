@@ -44,7 +44,7 @@ CREATE INDEX index_users_login ON users(login);
 
 CREATE TABLE auth(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    login TEXT UNIQUE,   
+    login TEXT,   
     refresh_token TEXT,
     FOREIGN KEY (login) REFERENCES users(login) ON DELETE CASCADE
 );

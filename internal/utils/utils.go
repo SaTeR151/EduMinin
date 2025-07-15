@@ -5,7 +5,6 @@ import (
 	"crypto/sha256"
 	"fmt"
 	"os"
-	"strconv"
 	"time"
 
 	"github.com/SaTeR151/EduMinin/internal/apperror"
@@ -33,12 +32,12 @@ func NewTokens(userAgent string, login string) (aToken string, rToken string, er
 	}
 
 	// create access token
-	atTimeExp, err := strconv.Atoi(os.Getenv("ATEXPIRES"))
-	if err != nil {
-		return aToken, rToken, err
-	}
+	// atTimeExp, err := strconv.Atoi(os.Getenv("ATEXPIRES"))
+	// if err != nil {
+	// 	return aToken, rToken, err
+	// }
 	claims := &jwt.MapClaims{
-		"exp":        time.Now().Add(time.Second * time.Duration(atTimeExp)).Unix(),
+		"exp":        time.Now().Add(time.Second * 3).Unix(), // time.Duration(atTimeExp)
 		"userAgent":  userAgent,
 		"login":      login,
 		"linkString": tokenLink,
@@ -63,7 +62,7 @@ func GetLoginFromJWT(aToken string) (string, error) {
 	if err != nil && err.Error() != "token has invalid claims: token is expired" {
 		return "", err
 	}
-	return claims["guid"].(string), nil
+	return claims["login"].(string), nil
 }
 
 func CheckLinkTokens(aToken string, rToken string) error {
