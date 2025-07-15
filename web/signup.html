@@ -110,7 +110,7 @@
       const select = document.getElementById('course');
       // Запрос списка курсов
       fetch('http://localhost:8080/api/courses', {
-        method: 'POST',
+        method: 'GET',
         headers: { 'Content-Type': 'application/json' }
       })
       .then(res => {

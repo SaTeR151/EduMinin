@@ -131,7 +131,7 @@
 
         // 1) POST-запрос за всеми новостями, сортируем по дате и берём 6 последних
         fetch('http://localhost:8080/api/news', {
-            method: 'POST',
+            method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         })
         .then(r => {
@@ -153,11 +153,11 @@
             news.forEach(item => {
             const div = document.createElement('div');
             div.className = 'news-item';
-            div.style.backgroundImage = `url('${item.img}')`;
+            div.style.backgroundImage = `url('${item.image}')`;
             div.innerHTML = `
                 <div class="news-text">
                 <h3>${item.title}</h3>
-                <p>${item.excerpt}</p>
+                <p>${item.description}</p>
                 </div>`;
             newsWrap.appendChild(div);
             });
@@ -169,7 +169,7 @@
 
         // 2) POST-запрос за всеми курсами и выводим их все
         fetch('http://localhost:8080/api/courses', {
-            method: 'POST',
+            method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         })
         .then(r => {
@@ -188,7 +188,7 @@
             const div = document.createElement('div');
             div.className = 'direction-block';
             div.innerHTML = `
-                <img src="${course.img}" alt="${course.title}" class="direction-icon">
+                <img src="${course.image}" alt="${course.title}" class="direction-icon">
                 <h3>${course.title}</h3>`;
             courseWrap.appendChild(div);
             });

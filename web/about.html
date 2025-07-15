@@ -148,7 +148,7 @@
 
         // POST-запрос за всеми курсами и выводим их все
         fetch('http://localhost:8080/api/courses', {
-            method: 'POST',
+            method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         })
         .then(r => {
@@ -167,7 +167,7 @@
             const div = document.createElement('div');
             div.className = 'direction-block';
             div.innerHTML = `
-                <img src="${course.img}" alt="${course.title}" class="direction-icon">
+                <img src="${course.image}" alt="${course.title}" class="direction-icon">
                 <h3>${course.title}</h3>`;
             courseWrap.appendChild(div);
             });

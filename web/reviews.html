@@ -100,7 +100,7 @@
         const container = document.getElementById('reviews-container');
 
         fetch('http://localhost:8080/api/reviews', {
-            method: 'POST',
+            method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         })
         .then(res => {
@@ -128,7 +128,7 @@
                 margin-bottom: 20px;
             `;
             block.innerHTML = `
-                <img src="${r.img}" alt="${r.name}" style="
+                <img src="${r.photo}" alt="${r.author}" style="
                 width: 80px;
                 height: 80px;
                 border-radius: 50%;
@@ -136,7 +136,7 @@
                 flex-shrink: 0;
                 ">
                 <div style="flex:1;">
-                <h4 style="margin:0 0 8px; color:var(--primary-3);">${r.name}</h4>
+                <h4 style="margin:0 0 8px; color:var(--primary-3);">${r.author}</h4>
                 <p style="margin:0; color:#555; line-height:1.5;">${r.text}</p>
                 </div>`;
             container.appendChild(block);
