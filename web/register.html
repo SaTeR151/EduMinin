@@ -4,11 +4,32 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Регистрация — Учебный центр</title>
+  <link rel="icon" type="image/png" href="assets/icons/favicon.png">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         integrity="sha512-kuh6GZlN8YYNV3CFyraYszEEiQxhT1VgezjuV3zw+FfLMKktlK6KaO5y+6ZT+0IY68PfQWda+E3bfUhBru7W2g=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    /* 1) Задаём body и html на всю высоту */
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+    /* 2) Flex-контейнер по вертикали */
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+    /* 3) Основной контент растягивается */
+    main {
+      flex: 1 0 auto;
+    }
+    /* 4) Футер прижат снизу */
+    .site-footer {
+      margin-top: auto;
+    }
+  </style>
 </head>
 <body>
   <!-- фиксированное верхнее меню -->
@@ -30,101 +51,132 @@
             </ul>
         </nav>
     </header>
-
-  <!-- Форма регистрации -->
-  <section class="register-section"
-           style="margin:100px auto 60px;
-                  max-width:500px;
-                  padding:20px;
-                  background:#fff;
-                  border-radius:var(--border-radius);
-                  box-shadow:0 2px 5px rgba(0,0,0,0.1);">
-    <h2 style="text-align:center;
-               color:var(--primary-2);
-               margin-bottom:20px;">
-      Регистрация
-    </h2>
-    <form id="register-form" action="submit_register.php" method="post">
-      <div class="form-group" style="margin-bottom:15px;">
-        <label for="username" style="display:block; margin-bottom:5px; font-weight:500;">Логин</label>
-        <input type="text" id="username" name="username" required
-               style="width:100%; padding:10px; border:1px solid #ccc; border-radius:var(--border-radius);">
-      </div>
-      <div class="form-group" style="margin-bottom:15px;">
-        <label for="password" style="display:block; margin-bottom:5px; font-weight:500;">Пароль</label>
-        <input type="password" id="password" name="password" required
-               style="width:100%; padding:10px; border:1px solid #ccc; border-radius:var(--border-radius);">
-      </div>
-      <div class="form-group" style="margin-bottom:25px;">
-        <label for="confirm_password" style="display:block; margin-bottom:5px; font-weight:500;">Подтверждение пароля</label>
-        <input type="password" id="confirm_password" name="confirm_password" required
-               style="width:100%; padding:10px; border:1px solid #ccc; border-radius:var(--border-radius);">
-        <div id="password-error" style="color:red; font-size:0.9rem; margin-top:5px;"></div>
-      </div>
-      <button type="submit"
-              style="width:100%; padding:15px; border:none; border-radius:var(--border-radius); background:var(--secondaryB-1); color:#fff; font-size:16px; font-weight:600; cursor:pointer; transition:background 0.3s;">
-        Зарегистрироваться
-      </button>
-    </form>
-  </section>
+  <main>
+  <!-- Форма регистрации (AJAX) -->
+<section class="register-section"
+         style="margin:100px auto 60px;
+                max-width:500px;
+                padding:20px;
+                background:#fff;
+                border-radius:var(--border-radius);
+                box-shadow:0 2px 5px rgba(0,0,0,0.1);">
+  <h2 style="text-align:center;
+             color:var(--primary-2);
+             margin-bottom:20px;">
+    Регистрация
+  </h2>
+  <form id="register-form">
+    <div class="form-group" style="margin-bottom:15px;">
+      <label for="username" style="display:block; margin-bottom:5px; font-weight:500;">Логин</label>
+      <input type="text" id="username" name="username" required
+             style="width:100%; padding:10px; border:1px solid #ccc; border-radius:var(--border-radius);">
+    </div>
+    <div class="form-group" style="margin-bottom:15px;">
+      <label for="password" style="display:block; margin-bottom:5px; font-weight:500;">Пароль</label>
+      <input type="password" id="password" name="password" required
+             style="width:100%; padding:10px; border:1px solid #ccc; border-radius:var(--border-radius);">
+    </div>
+    <div class="form-group" style="margin-bottom:25px;">
+      <label for="confirm_password" style="display:block; margin-bottom:5px; font-weight:500;">Подтверждение пароля</label>
+      <input type="password" id="confirm_password" name="confirm_password" required
+             style="width:100%; padding:10px; border:1px solid #ccc; border-radius:var(--border-radius);">
+      <div id="password-error" style="color:red; font-size:0.9rem; margin-top:5px;"></div>
+    </div>
+    <button type="submit"
+            style="width:100%; padding:15px; border:none; border-radius:var(--border-radius); background:var(--secondaryB-1); color:#fff; font-size:16px; font-weight:600; cursor:pointer; transition:background 0.3s;">
+      Зарегистрироваться
+    </button>
+  </form>
+  <div id="register-message" style="text-align:center; margin-top:15px;"></div>
+</section>
+  </main>
 
   <!-- Подвал -->
   <footer class="site-footer">
-    <div class="footer-top">
-      <div class="footer-logo-desc">
-        <img src="assets/images/footer-logo.png" alt="Логотип" class="footer-logo">
-        <p>Краткое описание вашего центра обучения.</p>
+      <div class="footer-top">
+          <div class="footer-logo-desc">
+              <img src="assets/images/footer-logo.png" alt="Логотип" class="footer-logo">
+              <p>CodeBrothers — учебный IT-центр из Нижнего Новгорода.</p>
+              <p>Учим программировать вместе и по-братски.</p>
+          </div>
+          <div class="footer-links">
+              <a href="catalog.html">Каталог курсов</a>
+              <a href="schedule.html">Расписание</a>
+              <a href="signup.html">Запись</a>
+              <a href="about.html">О нас</a>
+              <a href="reviews.html">Отзывы</a>
+          </div>
+          <div class="footer-centers" id="centers">
+              <h4>Учебные центры</h4>
+              <p>ул. Ульянова, 1</p>
+              <p>ул. Ульянова, 10а</p>
+              <p>ул. Челюскинцев, 9</p>
+          </div>
       </div>
-      <div class="footer-links">
-                <a href="catalog.html">Каталог курсов</a>
-                <a href="schedule.html">Расписание</a>
-                <a href="signup.html">Запись</a>
-                <a href="about.html">О нас</a>
-                <a href="reviews.html">Отзывы</a>
-            </div>
-      <div class="footer-centers">
-        <h4>Учебные центры</h4>
-        <p>ул. Ульянова, 1</p>
-        <p>ул. Ульянова, 10а</p>
-        <p>ул. Челюскинцев, 9</p>
+      <hr>
+      <div class="footer-bottom">
+          <div class="footer-copy">© 2025 Все права защищены</div>
+          <div class="footer-policy">
+              <a href="docs/Соглашение на обработку персональных данных.pdf">Соглашение на обработку персональных данных</a>
+              <a href="docs/Политика конфиденциальности.pdf">Политика конфиденциальности</a>
+              <a href="docs/Сведения об образовательной организации.pdf">Сведения об образовательной организации</a>
+              <a href="docs/Информация об оплате.pdf">Информация об оплате</a>
+          </div>
+          <div class="footer-social">
+              <a href="https://vk.com" target="_blank"><i class="fab fa-vk"></i></a>
+              <a href="https://t.me" target="_blank"><i class="fab fa-telegram"></i></a>
+          </div>
       </div>
-    </div>
-    <hr>
-    <div class="footer-bottom">
-      <div class="footer-copy">© 2025 Все права защищены</div>
-      <div class="footer-policy">
-        <a href="agreement.php">Соглашение на обработку персональных данных</a>
-        <a href="privacy.php">Политика конфиденциальности</a>
-        <a href="edu-info.php">Сведения об образовательной организации</a>
-        <a href="payment-info.php">Информация об оплате</a>
-      </div>
-      <div class="footer-social">
-        <a href="https://vk.com" target="_blank"><i class="fab fa-vk"></i></a>
-        <a href="https://t.me" target="_blank"><i class="fab fa-telegram"></i></a>
-      </div>
-    </div>
   </footer>
 
   <script src="js/main.js"></script>
-  <script>
-document.addEventListener('DOMContentLoaded', function() {
+<script>
+document.addEventListener('DOMContentLoaded', () => {
   const form    = document.getElementById('register-form');
   const pwd     = document.getElementById('password');
   const confirm = document.getElementById('confirm_password');
-  const error   = document.getElementById('password-error');
+  const errEl   = document.getElementById('password-error');
+  const msgEl   = document.getElementById('register-message');
 
-  form.addEventListener('submit', function(e) {
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    errEl.textContent = '';
+    msgEl.textContent = '';
+
     if (pwd.value !== confirm.value) {
-      e.preventDefault();
-      error.textContent = 'Пароли не совпадают';
+      errEl.textContent = 'Пароли не совпадают';
       confirm.focus();
+      return;
     }
+
+    const payload = {
+      username: document.getElementById('username').value.trim(),
+      password: pwd.value
+    };
+
+    fetch('http://localhost:8080/api/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then(res => {
+      if (!res.ok) throw new Error('Сервер: ' + res.status);
+      return res.json();
+    })
+    .then(json => {
+      msgEl.style.color = '#28a745';
+      msgEl.textContent = json.message || 'Регистрация прошла успешно!';
+      form.reset();
+    })
+    .catch(err => {
+      console.error(err);
+      msgEl.style.color = '#d9534f';
+      msgEl.textContent = 'Ошибка регистрации. Попробуйте ещё раз.';
+    });
   });
 
   [pwd, confirm].forEach(input => {
-    input.addEventListener('input', () => {
-      error.textContent = '';
-    });
+    input.addEventListener('input', () => { errEl.textContent = ''; });
   });
 });
 </script>

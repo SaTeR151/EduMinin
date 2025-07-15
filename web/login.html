@@ -10,6 +10,26 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         integrity="sha512-kuh6GZlN8YYNV3CFyraYszEEiQxhT1VgezjuV3zw+FfLMKktlK6KaO5y+6ZT+0IY68PfQWda+E3bfUhBru7W2g=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    /* 1) Задаём body и html на всю высоту */
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+    /* 2) Flex-контейнер по вертикали */
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+    /* 3) Основной контент растягивается */
+    main {
+      flex: 1 0 auto;
+    }
+    /* 4) Футер прижат снизу */
+    .site-footer {
+      margin-top: auto;
+    }
+  </style>
 </head>
 <body>
   <!-- фиксированное верхнее меню -->
@@ -31,75 +51,117 @@
             </ul>
         </nav>
     </header>
-
-  <!-- Форма входа -->
-  <section class="login-section"
-           style="margin:100px auto 60px;
-                  max-width:500px;
-                  padding:20px;
-                  background:#fff;
-                  border-radius:var(--border-radius);
-                  box-shadow:0 2px 5px rgba(0,0,0,0.1);">
-    <h2 style="text-align:center;
-               color:var(--primary-2);
-               margin-bottom:20px;">
-      Войти в личный кабинет
-    </h2>
-    <form action="submit_login.php" method="post">
-      <div class="form-group" style="margin-bottom:15px;">
-        <label for="username" style="display:block; margin-bottom:5px; font-weight:500;">Логин</label>
-        <input type="text" id="username" name="username" required
-               style="width:100%; padding:10px; border:1px solid #ccc; border-radius:var(--border-radius);">
-      </div>
-      <div class="form-group" style="margin-bottom:25px;">
-        <label for="password" style="display:block; margin-bottom:5px; font-weight:500;">Пароль</label>
-        <input type="password" id="password" name="password" required
-               style="width:100%; padding:10px; border:1px solid #ccc; border-radius:var(--border-radius);">
-      </div>
-      <button type="submit"
-              style="width:100%; padding:15px; border:none; border-radius:var(--border-radius); background:var(--secondaryB-1); color:#fff; font-size:16px; font-weight:600; cursor:pointer; transition:background 0.3s;">
-        Войти
-      </button>
-    </form>
-  </section>
-
+  <main>
+  <!-- Форма входа (AJAX) -->
+<section class="login-section"
+         style="margin:100px auto 60px;
+                max-width:500px;
+                padding:20px;
+                background:#fff;
+                border-radius:var(--border-radius);
+                box-shadow:0 2px 5px rgba(0,0,0,0.1);">
+  <h2 style="text-align:center;
+             color:var(--primary-2);
+             margin-bottom:20px;">
+    Войти в личный кабинет
+  </h2>
+  <form id="login-form">
+    <div class="form-group" style="margin-bottom:15px;">
+      <label for="login-username" style="display:block; margin-bottom:5px; font-weight:500;">Логин</label>
+      <input type="text" id="login-username" name="username" required
+             style="width:100%; padding:10px; border:1px solid #ccc; border-radius:var(--border-radius);">
+    </div>
+    <div class="form-group" style="margin-bottom:25px;">
+      <label for="login-password" style="display:block; margin-bottom:5px; font-weight:500;">Пароль</label>
+      <input type="password" id="login-password" name="password" required
+             style="width:100%; padding:10px; border:1px solid #ccc; border-radius:var(--border-radius);">
+    </div>
+    <button type="submit"
+            style="width:100%; padding:15px; border:none; border-radius:var(--border-radius); background:var(--secondaryB-1); color:#fff; font-size:16px; font-weight:600; cursor:pointer; transition:background 0.3s;">
+      Войти
+    </button>
+  </form>
+  <div id="login-message" style="text-align:center; margin-top:15px;"></div>
+</section>
+  </main>
   <!-- Подвал -->
   <footer class="site-footer">
-    <div class="footer-top">
-      <div class="footer-logo-desc">
-        <img src="assets/images/footer-logo.png" alt="Логотип" class="footer-logo">
-        <p>Краткое описание вашего центра обучения.</p>
+      <div class="footer-top">
+          <div class="footer-logo-desc">
+              <img src="assets/images/footer-logo.png" alt="Логотип" class="footer-logo">
+              <p>CodeBrothers — учебный IT-центр из Нижнего Новгорода.</p>
+              <p>Учим программировать вместе и по-братски.</p>
+          </div>
+          <div class="footer-links">
+              <a href="catalog.html">Каталог курсов</a>
+              <a href="schedule.html">Расписание</a>
+              <a href="signup.html">Запись</a>
+              <a href="about.html">О нас</a>
+              <a href="reviews.html">Отзывы</a>
+          </div>
+          <div class="footer-centers" id="centers">
+              <h4>Учебные центры</h4>
+              <p>ул. Ульянова, 1</p>
+              <p>ул. Ульянова, 10а</p>
+              <p>ул. Челюскинцев, 9</p>
+          </div>
       </div>
-      <div class="footer-links">
-                <a href="catalog.html">Каталог курсов</a>
-                <a href="schedule.html">Расписание</a>
-                <a href="signup.html">Запись</a>
-                <a href="about.html">О нас</a>
-                <a href="reviews.html">Отзывы</a>
-            </div>
-      <div class="footer-centers">
-        <h4>Учебные центры</h4>
-        <p>ул. Ульянова, 1</p>
-        <p>ул. Ульянова, 10а</p>
-        <p>ул. Челюскинцев, 9</p>
+      <hr>
+      <div class="footer-bottom">
+          <div class="footer-copy">© 2025 Все права защищены</div>
+          <div class="footer-policy">
+              <a href="docs/Соглашение на обработку персональных данных.pdf">Соглашение на обработку персональных данных</a>
+              <a href="docs/Политика конфиденциальности.pdf">Политика конфиденциальности</a>
+              <a href="docs/Сведения об образовательной организации.pdf">Сведения об образовательной организации</a>
+              <a href="docs/Информация об оплате.pdf">Информация об оплате</a>
+          </div>
+          <div class="footer-social">
+              <a href="https://vk.com" target="_blank"><i class="fab fa-vk"></i></a>
+              <a href="https://t.me" target="_blank"><i class="fab fa-telegram"></i></a>
+          </div>
       </div>
-    </div>
-    <hr>
-    <div class="footer-bottom">
-      <div class="footer-copy">© 2025 Все права защищены</div>
-      <div class="footer-policy">
-        <a href="agreement.php">Соглашение на обработку персональных данных</a>
-        <a href="privacy.php">Политика конфиденциальности</a>
-        <a href="edu-info.php">Сведения об образовательной организации</a>
-        <a href="payment-info.php">Информация об оплате</a>
-      </div>
-      <div class="footer-social">
-        <a href="https://vk.com" target="_blank"><i class="fab fa-vk"></i></a>
-        <a href="https://t.me" target="_blank"><i class="fab fa-telegram"></i></a>
-      </div>
-    </div>
   </footer>
 
   <script src="js/main.js"></script>
+  <script>
+document.addEventListener('DOMContentLoaded', () => {
+  const form  = document.getElementById('login-form');
+  const msgEl = document.getElementById('login-message');
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    msgEl.textContent = '';
+
+    const payload = {
+      username: document.getElementById('login-username').value.trim(),
+      password: document.getElementById('login-password').value
+    };
+
+    fetch('http://localhost:8080/api/auth/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then(res => {
+      if (!res.ok) {
+        if (res.status === 401) throw new Error('Неверный логин или пароль');
+        throw new Error('Сервер вернул ошибку ' + res.status);
+      }
+      return res.json();
+    })
+    .then(json => {
+      msgEl.style.color = '#28a745';
+      msgEl.textContent = json.message || 'Успешный вход!';
+      // При необходимости перенаправляем:
+      // window.location.href = '/dashboard.php';
+    })
+    .catch(err => {
+      console.error(err);
+      msgEl.style.color = '#d9534f';
+      msgEl.textContent = err.message;
+    });
+  });
+});
+</script>
 </body>
 </html>

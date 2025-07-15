@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Учебные центры — Учебный центр</title>
+  <link rel="icon" type="image/png" href="assets/icons/favicon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* 1) Задаём body и html на всю высоту */
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+    /* 2) Flex-контейнер по вертикали */
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+    /* 3) Основной контент растягивается */
+    main {
+      flex: 1 0 auto;
+    }
+    /* 4) Футер прижат снизу */
+    .site-footer {
+      margin-top: auto;
+    }
+  </style>
+</head>
+<body>
+  <!-- фиксированное верхнее меню -->
+  <header class="site-header">
+        <nav class="main-nav">
+            <button class="menu-toggle" aria-label="Открыть меню">
+                <img src="assets/icons/menu.png" alt="Меню" class="menu-icon">
+            </button>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Главная</a></li>
+                <li><a href="news.html">Новости</a></li>
+                <li><a href="reviews.html">Отзывы</a></li>
+                <li><a href="signup.html">Запись</a></li>
+                <li><a href="about.html">О нас</a></li>
+            </ul>
+            <ul class="auth-links">
+                <li><a href="register.html">Зарегистрироваться</a></li>
+                <li><a href="login.html">Войти</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+  <!-- Раздел учебных центров -->
+  <section class="centers-section" style="margin:100px auto 60px; max-width:1500px; padding:0 20px;">
+    <h2 style="text-align:center; color:var(--primary-2); margin-bottom:40px;">Наши учебные центры</h2>
+    <div class="centers-container" style="display:flex; gap:20px; flex-wrap:wrap; justify-content:center;">
+      <!-- Центр 1 -->
+      <div class="center-block" style="
+            position:relative;
+            flex:0 0 438px;        /* 350px * 1.25 */
+            height:358px;          /* 250px * 1.25 */
+            background-image:url('assets/images/center1.jpg');
+            background-size:cover;
+            background-position:center;
+            border-radius:var(--border-radius);
+            overflow:hidden;
+            box-shadow:0 2px 5px rgba(0,0,0,0.1);
+      ">
+        <div class="center-overlay" style="
+              position:absolute;
+              bottom:0; left:0; right:0;
+              height:80px;
+              background:linear-gradient(transparent, rgba(0,0,0,0.7));
+        "></div>
+        <div class="center-info" style="
+              position:absolute;
+              bottom:10px; left:15px; right:15px;
+              color:#fff;
+            ">
+          <h3 class="center-title" style="margin:0 0 5px; font-size:1.25rem;">НГПУ им. Козьмы Минина</h3>
+          <p class="center-address" style="margin:0; font-size:0.9rem;">ул. Ульянова, 1</p>
+        </div>
+      </div>
+
+      <!-- Центр 2 -->
+      <div class="center-block" style="
+            position:relative;
+            flex:0 0 438px;
+            height:358px;
+            background-image:url('assets/images/center2.jpg');
+            background-size:cover;
+            background-position:center;
+            border-radius:var(--border-radius);
+            overflow:hidden;
+            box-shadow:0 2px 5px rgba(0,0,0,0.1);
+      ">
+        <div class="center-overlay" style="
+              position:absolute;
+              bottom:0; left:0; right:0;
+              height:80px;
+              background:linear-gradient(transparent, rgba(0,0,0,0.7));
+        "></div>
+        <div class="center-info" style="
+              position:absolute;
+              bottom:10px; left:15px; right:15px;
+              color:#fff;
+            ">
+          <h3 class="center-title" style="margin:0 0 5px; font-size:1.25rem;">Апрель Софт</h3>
+          <p class="center-address" style="margin:0; font-size:0.9rem;">ул. Ульянова, 10а</p>
+        </div>
+      </div>
+
+      <!-- Центр 3 -->
+      <div class="center-block" style="
+            position:relative;
+            flex:0 0 438px;
+            height:358px;
+            background-image:url('assets/images/center3.jpg');
+            background-size:cover;
+            background-position:center;
+            border-radius:var(--border-radius);
+            overflow:hidden;
+            box-shadow:0 2px 5px rgba(0,0,0,0.1);
+      ">
+        <div class="center-overlay" style="
+              position:absolute;
+              bottom:0; left:0; right:0;
+              height:80px;
+              background:linear-gradient(transparent, rgba(0,0,0,0.7));
+        "></div>
+        <div class="center-info" style="
+              position:absolute;
+              bottom:10px; left:15px; right:15px;
+              color:#fff;
+            ">
+          <h3 class="center-title" style="margin:0 0 5px; font-size:1.25rem;">Кванториум</h3>
+          <p class="center-address" style="margin:0; font-size:0.9rem;">ул. Челюскинцев, 9</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  </main>
+  <!-- Подвал -->
+  <footer class="site-footer">
+      <div class="footer-top">
+          <div class="footer-logo-desc">
+              <img src="assets/images/footer-logo.png" alt="Логотип" class="footer-logo">
+              <p>CodeBrothers — учебный IT-центр из Нижнего Новгорода.</p>
+              <p>Учим программировать вместе и по-братски.</p>
+          </div>
+          <div class="footer-links">
+              <a href="catalog.html">Каталог курсов</a>
+              <a href="schedule.html">Расписание</a>
+              <a href="signup.html">Запись</a>
+              <a href="about.html">О нас</a>
+              <a href="reviews.html">Отзывы</a>
+          </div>
+          <div class="footer-centers" id="centers">
+              <h4>Учебные центры</h4>
+              <p>ул. Ульянова, 1</p>
+              <p>ул. Ульянова, 10а</p>
+              <p>ул. Челюскинцев, 9</p>
+          </div>
+      </div>
+      <hr>
+      <div class="footer-bottom">
+          <div class="footer-copy">© 2025 Все права защищены</div>
+          <div class="footer-policy">
+              <a href="docs/Соглашение на обработку персональных данных.pdf">Соглашение на обработку персональных данных</a>
+              <a href="docs/Политика конфиденциальности.pdf">Политика конфиденциальности</a>
+              <a href="docs/Сведения об образовательной организации.pdf">Сведения об образовательной организации</a>
+              <a href="docs/Информация об оплате.pdf">Информация об оплате</a>
+          </div>
+          <div class="footer-social">
+              <a href="https://vk.com" target="_blank"><i class="fab fa-vk"></i></a>
+              <a href="https://t.me" target="_blank"><i class="fab fa-telegram"></i></a>
+          </div>
+      </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

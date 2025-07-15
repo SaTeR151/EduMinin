@@ -36,19 +36,17 @@ CREATE TABLE events (
 
 CREATE TABLE users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    login INTEGER AUTOINCREMENT UNIQUE,       
+    login TEXT UNIQUE,       
     pass TEXT                     
 );
 
-CREATE TABLE users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    login INTEGER UNIQUE,       
-    pass TEXT                     
-);
+CREATE INDEX index_users_login ON users(login);
 
 CREATE TABLE auth(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    login INTEGER UNIQUE,   
+    login TEXT UNIQUE,   
     refresh_token TEXT,
     FOREIGN KEY (login) REFERENCES users(login) ON DELETE CASCADE
 );
+
+CREATE INDEX index_auth_login ON auth(login);

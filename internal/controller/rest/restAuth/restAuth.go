@@ -11,7 +11,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func SignUp(services *services.Services) gin.HandlerFunc {
+func Signup(services *services.Services) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		logrus.Info("getting tokens")
 		var userData dto.UserData
@@ -20,11 +20,11 @@ func SignUp(services *services.Services) gin.HandlerFunc {
 			c.AbortWithStatusJSON(http.StatusBadRequest, dto.Error{Error: apperror.ErrIncorrectRequestBody.Error()})
 			return
 		}
-		aToken, rToken, err := services.AuthManager.Signup(userData)
+		aToken, rToken, err := services.AuthManager.Signup(userData, c.Request.Header.Get("User-Agent"), c.ClientIP())
 		if err != nil {
-			if err == apperror.ErrUnauthorized {
+			if err == apperror.ErrUncorrectData {
 				logrus.Warn(err)
-				c.AbortWithStatusJSON(http.StatusUnauthorized, dto.Error{Error: err.Error()})
+				c.AbortWithStatusJSON(401, dto.Error{Error: err.Error()})
 				return
 			}
 			logrus.Error(err)
@@ -33,7 +33,7 @@ func SignUp(services *services.Services) gin.HandlerFunc {
 		}
 
 		restutils.SetCookieTokens(c, aToken, rToken)
-		c.Status(http.StatusCreated)
+		c.AbortWithStatusJSON(http.StatusCreated, dto.Message{Message: "user logged"})
 		logrus.Info("tokens have been sent")
 	}
 }
@@ -41,7 +41,7 @@ func SignUp(services *services.Services) gin.HandlerFunc {
 func Logout(services *services.Services) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		logrus.Info("starting logout")
-		atCookie, err := c.Request.Cookie("at")
+		atCookie, err := c.Request.Cookie("EduMininAT")
 		if err != nil {
 			logrus.Error(err)
 			c.AbortWithStatusJSON(http.StatusUnauthorized, dto.Error{Error: apperror.ErrUnauthorized.Error()})
@@ -63,7 +63,7 @@ func Logout(services *services.Services) gin.HandlerFunc {
 
 func Register(services *services.Services) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		logrus.Info("getting tokens")
+		logrus.Info("starting register")
 		var userData dto.UserData
 		if err := c.ShouldBindJSON(&userData); err != nil {
 			logrus.Warn(err)
@@ -72,16 +72,16 @@ func Register(services *services.Services) gin.HandlerFunc {
 		}
 		err := services.AuthManager.Register(userData)
 		if err != nil {
-			if err == apperror.ErrUnauthorized {
+			if err == apperror.ErrUserAlreadyExists {
 				logrus.Warn(err)
-				c.AbortWithStatusJSON(http.StatusUnauthorized, dto.Error{Error: err.Error()})
+				c.AbortWithStatusJSON(http.StatusConflict, dto.Error{Error: err.Error()})
 				return
 			}
 			logrus.Error(err)
 			c.AbortWithStatusJSON(http.StatusInternalServerError, dto.Error{Error: err.Error()})
 			return
 		}
-		c.Status(http.StatusCreated)
-		logrus.Info("tokens have been sent")
+		c.AbortWithStatusJSON(http.StatusCreated, dto.Message{Message: "user registered"})
+		logrus.Info("user registered")
 	}
 }

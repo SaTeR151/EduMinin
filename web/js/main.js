@@ -26,3 +26,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+document.querySelectorAll('.news-container, .directions-container')
+  .forEach(container => {
+    container.addEventListener('wheel', e => {
+      // если есть вертикальное движение колеса — прокручиваем влево/вправо
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        e.preventDefault();
+        container.scrollLeft += e.deltaY;
+      }
+    });
+});

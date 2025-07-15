@@ -119,7 +119,7 @@ body {
 
 .hero-button {
   display: inline-block;
-  width: 200px;
+  width: 300px;
   padding: 15px;
   border-radius: 50px;
   background: var(--secondaryA-4);
@@ -128,6 +128,8 @@ body {
   font-weight: 600;
   text-align: center;
   transition: background 0.3s;
+  height: 70px;       /* или любое другое нужное значение */
+  max-height: 70px;   /* чтобы не выросли, даже при большом padding */
 }
 .hero-button:hover {
   background: var(--secondaryA-1);
@@ -144,9 +146,39 @@ body {
   margin-bottom: 20px;
   color: var(--primary-2);
 }
-.advantages-container, .directions-container {
+.advantages-container {
   display: flex;
   gap: 20px;
+}
+.directions-container {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -ms-overflow-style: none;   /* IE/Edge */
+  scrollbar-width: none;      /* Firefox */
+}
+.directions-container {
+  padding-left: 12px;
+  padding-right: 12px;
+}
+.directions-container .direction-block {
+  flex: 0 0 auto;             /* не растягиваемся */
+  width: 300px;               /* та же ширина, что у .news-item */
+  height: 200px;              /* подогнать под свою высоту новостей */
+  background: #fff;           /* белый фон */
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  position: relative;
+  overflow: hidden;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+.directions-container .direction-block img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 .advantage-block, .direction-block {
   flex: 1;
@@ -156,13 +188,14 @@ body {
   text-align: center;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
+
 /* Иконки-картинки для Преимуществ */
-.advantage-icon {
-  display: block;         /* чтобы центрировалось */
-  width: 60px;            /* или любой другой размер */
-  height: auto;
-  margin: 0 auto 15px;    /* центр по горизонтали + отступ снизу */
-}
+/* .advantage-icon { */
+/* display: block;          чтобы центрировалось */
+/*  width: 60px;             или любой другой размер */
+/*  height: auto;
+/*  margin: 0 auto 15px;     центр по горизонтали + отступ снизу */
+/*} */
 
 /* Иконки-картинки для Направлений */
 .direction-icon {
@@ -184,7 +217,7 @@ body {
 
 .advantage-block .advantage-icon,
 .direction-block .direction-icon {
-  width: 60px !important;
+  width: 100px !important;
   height: auto !important;
   display: block;
   margin: 0 auto 15px; /* центрируем и сохраняем отступ */
@@ -195,7 +228,15 @@ body {
   display: flex;
   gap: 20px;
   overflow-x: auto;
+  overflow-y: hidden;
+  -ms-overflow-style: none;  /* IE/Edge */
+  scrollbar-width: none;     /* Firefox */
   padding-bottom: 10px;
+}
+
+.news-container::-webkit-scrollbar,
+.directions-container::-webkit-scrollbar {
+  display: none;             /* Chrome/Safari/WebKit */
 }
 .news-item {
   flex-shrink: 0;
@@ -236,13 +277,10 @@ body {
   flex-wrap: wrap;
   justify-content: space-between;
 }
-.footer-logo-desc {
-  max-width: 200px;
-  margin-bottom: 20px;
-}
+
 .footer-logo {
-  width: 70%;
-  max-width: 150px;
+  width: 100%;
+  max-width: 300px;
   margin-bottom: 10px;
 }
 .footer-links, .footer-centers {
@@ -274,7 +312,7 @@ body {
   justify-content: space-between;
   align-items: center;
 }
-.footer-copy { }
+
 .footer-policy {
   display: flex;
   flex-wrap: wrap;
@@ -784,193 +822,74 @@ body {
   /* кнопки по ширине экрана, но с max-width */
   .hero-button {
     width: 100%;
-    max-width: 220px;
+    max-width: 500px;
     padding: 10px 0;
     font-size: 14px;
   }
 }
 
-/* == Горизонтальный скролл без полосы == */
-.news-container,
-.directions-container {
+
+/* 1. Вертикальное выравнивание внизу */
+.hero-content {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
   display: flex;
-  gap: 20px;
-  overflow-x: auto;
-  /* прячем скроллбар */
-  -ms-overflow-style: none;  /* IE10+ */
-  scrollbar-width: none;     /* Firefox */
-}
-.news-container::-webkit-scrollbar,
-.directions-container::-webkit-scrollbar {
-  display: none;             /* Chrome/Safari/WebKit */
+  flex-direction: column;
+  justify-content: flex-end;   /* контент прижат к низу */
+  align-items: center;
+  padding-bottom: 60px;        /* отступ снизу */
 }
 
-/* == Карточка новости == */
-.news-item {
-  flex: 0 0 auto;           /* не растягиваемся */
-  width: 300px;              /* или подберите своё */
-  background: #fff;
-  border-radius: var(--border-radius);
-  overflow: hidden;          /* чтобы img-fade и скругления работали */
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-.news-img-container {
-  position: relative;
-}
-.news-img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-.news-img-fade {
-  position: absolute;
-  bottom: 0; left: 0;
-  width: 100%;
-  height: 60px; /* глубина градиента */
-  background: linear-gradient(transparent, rgba(0,0,0,0.5));
-}
-.news-text {
-  padding: 15px;
-}
-.news-text h3 {
-  margin-bottom: 8px;
-  color: var(--primary-3);
-}
-.news-text p {
-  font-size: 14px;
-  color: #555;
-  line-height: 1.4;
-}
-
-/* == Карточка курса == */
-.direction-block {
-  flex: 0 0 auto;
-
-  /* 1) Горизонтальный скролл с видимым скроллбаром */
-.news-container {
-  display: flex;
-  gap: 20px;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  /* переопределяем (если где-то скрывали) */
-  -ms-overflow-style: auto;     /* IE */
-  scrollbar-width: auto;        /* Firefox */
-}
-.news-container::-webkit-scrollbar {
-  display: block;               /* Chrome/Safari */
-}
-
-/* 2) Фиксированный размер и белый фон карточки новости */
-.news-item {
-  flex: 0 0 auto;               /* не растягиваться */
-  width: 300px;                 /* подогнать под дизайн */
-  height: 200px;                /* убедиться, что все одинакового размера */
-  background-color: #fff;       /* белый фон */
-  background-size: cover;       /* «cover» для фонового изображения */
-  background-position: center;
-  border-radius: var(--border-radius);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  position: relative;           /* для ::after и .news-text */
-  overflow: hidden;
-}
-
-/* 3) Градиент «fade» внизу картинки */
-.news-item::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 60px;                 /* глубина затухания */
-  background: linear-gradient(transparent, #fff);
-  pointer-events: none;
-}
-
-/* 4) Текст поверх градиента */
-.news-text {
-  position: absolute;
-  bottom: 10px; left: 15px; right: 15px;
-  color: #333;
-}
-.news-text h3 {
-  margin: 0 0 5px;
-  font-size: 1rem;
-  color: var(--primary-3);
-}
-.news-text p {
-  margin: 0;
-  font-size: 0.85rem;
-  color: #555;
-  line-height: 1.3;
-}
-  width: 200px;             /* подогнать под дизайн */
-  background: #fff;
-  border-radius: var(--border-radius);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  padding: 20px;
+/* 2. Теглайн */
+.hero-tagline {
+  font-size: 3.6rem;
+  /* чуть-чуть фиолетового: белый + 5% пурпурного */
+  color: rgba(250,240,255,0.95);
+  margin-bottom: 60px;
+  margin-top: 50px;
+  text-shadow: 0 0 8px rgba(250,240,255,0.8);
   text-align: center;
-  transition: transform .3s ease;
-}
-.direction-block:hover {
-  transform: translateY(-5px) scale(1.03);
-}
-.direction-icon {
-  display: block;
-  width: 60px;
-  height: auto;
-  margin: 0 auto 12px;
 }
 
-/* 1) Горизонтальный скролл с видимым скроллбаром */
-.news-container {
-  display: flex;
-  gap: 20px;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  /* переопределяем (если где-то скрывали) */
-  -ms-overflow-style: auto;     /* IE */
-  scrollbar-width: auto;        /* Firefox */
+/* 3. Кнопки-ссылки делают крупнее */
+.hero-nav .hero-button {
+  font-size: 1.6rem;
+  padding: 18px 28px;
+  margin: 0 10px;
+  border-radius: 50px;
+  transition: background 0.3s, box-shadow 0.3s;
 }
-.news-container::-webkit-scrollbar {
-  display: block;               /* Chrome/Safari */
+.hero-nav .hero-button:hover {
+  box-shadow: 0 0 1px rgba(255,255,255,0.6);
 }
 
-/* 2) Фиксированный размер и белый фон карточки новости */
-.news-item {
-  flex: 0 0 auto;               /* не растягиваться */
-  width: 300px;                 /* подогнать под дизайн */
-  height: 200px;                /* убедиться, что все одинакового размера */
-  background-color: #fff;       /* белый фон */
-  background-size: cover;       /* «cover» для фонового изображения */
-  background-position: center;
-  border-radius: var(--border-radius);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  position: relative;           /* для ::after и .news-text */
-  overflow: hidden;
+/* 4. Если нужно чуть больше свечения по кнопкам */
+.hero-nav .hero-button {
+  text-shadow: 0 0 4px rgba(255,255,255,0.6);
 }
 
-/* 3) Градиент «fade» внизу картинки */
-.news-item::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 60px;                 /* глубина затухания */
-  background: linear-gradient(transparent, #fff);
-  pointer-events: none;
+/* 5. На маленьких экранах чуть уменьшаем */
+@media (max-width: 900px) {
+  .hero-tagline {
+    font-size: 2rem;
+    margin-bottom: 15px;
+  }
+  .hero-nav .hero-button {
+    font-size: 1.1rem;
+    padding: 14px 22px;
+    margin: 0 5px;
+  }
 }
 
-/* 4) Текст поверх градиента */
-.news-text {
-  position: absolute;
-  bottom: 10px; left: 15px; right: 15px;
-  color: #333;
-}
-.news-text h3 {
-  margin: 0 0 5px;
-  font-size: 1rem;
-  color: var(--primary-3);
-}
-.news-text p {
-  margin: 0;
-  font-size: 0.85rem;
-  color: #555;
-  line-height: 1.3;
+@media (max-width: 600px) {
+  .hero-tagline {
+    font-size: 2rem;
+    color: black;
+    margin-bottom: 15px;
+  }
+  .hero-nav .hero-button {
+    font-size: 1.1rem;
+    padding: 14px 22px;
+    margin: 0 5px;
+  }
 }

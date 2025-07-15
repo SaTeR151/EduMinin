@@ -35,60 +35,68 @@
   <!-- Карточка «О компании» -->
   <section class="about-section">
   <!-- Вступление -->
-  <<div class="about-intro">
-    <h2 class="about-title">О компании «Название компании»</h2>
+  <div class="about-intro">
+    <h2 class="about-title">О компании «CodeBrothers»</h2>
     <p class="about-text">
-      «Название компании» — молодой образовательный центр в Нижнем Новгороде. 
+      «CodeBrothers» — молодой образовательный центр в Нижнем Новгороде. 
       Мы только начинаем свой путь, но уже собрали команду настоящих профессионалов,
       готовых поделиться знаниями и навыками в сфере IT.
     </p>
   </div>
 
   <!-- Курсы -->
-  <div class="about-courses">
-    <h3 class="section-subtitle">Наши курсы</h3>
-    <div class="courses-grid">
-      <div class="course-card">
-        <img src="assets/icons/java.png" alt="" class="course-icon">
-        <h4>Java-разработка</h4>
-        <p>От основ синтаксиса до корпоративных приложений и микросервисов.</p>
-      </div>
-      <div class="course-card">
-        <img src="assets/icons/security.png" alt="" class="course-icon">
-        <h4>Кибербезопасность</h4>
-        <p>Защита приложений и сетей от современных угроз.</p>
-      </div>
-      <div class="course-card">
-        <img src="assets/icons/datascience.png" alt="" class="course-icon">
-        <h4>Data Science & ML</h4>
-        <p>Анализ данных, визуализация и алгоритмы машинного обучения.</p>
-      </div>
-      <div class="course-card">
-        <img src="assets/icons/frontend.png" alt="" class="course-icon">
-        <h4>Веб-разработка</h4>
-        <p>JavaScript, React, оптимизация и best practices.</p>
-      </div>
+  <section class="directions" id="catalog">
+    <h2>Наши курсы</h2>
+    <div class="directions-container">
     </div>
-  </div>
+  </section>
 
   <!-- Направления -->
   <div class="about-directions">
     <h3 class="section-subtitle">Ключевые направления</h3>
     <div class="directions-grid">
       <div class="direction-item">
-        <span>Мобильная разработка</span>
+        <span>Основы программирования (Python / C / C#)</span>
       </div>
       <div class="direction-item">
         <span>Облачные технологии</span>
       </div>
       <div class="direction-item">
-        <span>UI/UX дизайн</span>
+        <span>Фронтенд-разработка (HTML, CSS, JavaScript)</span>
       </div>
       <div class="direction-item">
-        <span>Тестирование ПО</span>
+        <span>Бэкенд-разработка (Node.js, Django, .NET)</span>
+      </div>
+    </div>
+    <div class="directions-grid">
+      <div class="direction-item">
+        <span>Мобильные приложения (Android, iOS)</span>
       </div>
       <div class="direction-item">
-        <span>Business Intelligence</span>
+        <span>Data Science и машинное обучение</span>
+      </div>
+      <div class="direction-item">
+        <span>DevOps и облака</span>
+      </div>
+      <div class="direction-item">
+        <span>Автоматизированное тестирование ПО (Selenium, PyTest)</span>
+      </div>
+      <div class="direction-item">
+        <span>Веб-дизайн и UI/UX</span>
+      </div>
+    </div>
+    <div class="directions-grid">
+      <div class="direction-item">
+        <span>Интернет вещей (IoT) и встраиваемые системы</span>
+      </div>
+      <div class="direction-item">
+        <span>Управление IT-проектами (Scrum, Agile, Kanban)</span>
+      </div>
+      <div class="direction-item">
+        <span>Сетевое и системное администрирование</span>
+      </div>
+      <div class="direction-item">
+        <span>Робототехника и микроконтроллеры (Arduino, Raspberry Pi)</span>
       </div>
     </div>
   </div>
@@ -97,41 +105,78 @@
 
   <!-- Подвал -->
   <footer class="site-footer">
-    <div class="footer-top">
-      <div class="footer-logo-desc">
-        <img src="assets/images/footer-logo.png" alt="Логотип" class="footer-logo">
-        <p>Краткое описание</p>
+      <div class="footer-top">
+          <div class="footer-logo-desc">
+              <img src="assets/images/footer-logo.png" alt="Логотип" class="footer-logo">
+              <p>CodeBrothers — учебный IT-центр из Нижнего Новгорода.</p>
+              <p>Учим программировать вместе и по-братски.</p>
+          </div>
+          <div class="footer-links">
+              <a href="catalog.html">Каталог курсов</a>
+              <a href="schedule.html">Расписание</a>
+              <a href="signup.html">Запись</a>
+              <a href="about.html">О нас</a>
+              <a href="reviews.html">Отзывы</a>
+          </div>
+          <div class="footer-centers" id="centers">
+              <h4>Учебные центры</h4>
+              <p>ул. Ульянова, 1</p>
+              <p>ул. Ульянова, 10а</p>
+              <p>ул. Челюскинцев, 9</p>
+          </div>
       </div>
-      <div class="footer-links">
-                <a href="catalog.html">Каталог курсов</a>
-                <a href="schedule.html">Расписание</a>
-                <a href="signup.html">Запись</a>
-                <a href="about.html">О нас</a>
-                <a href="reviews.html">Отзывы</a>
-            </div>
-      <div class="footer-centers">
-        <h4>Учебные центры</h4>
-        <p>ул. Ульянова, 1</p>
-        <p>ул. Ульянова, 10а</p>
-        <p>ул. Челюскинцев, 9</p>
+      <hr>
+      <div class="footer-bottom">
+          <div class="footer-copy">© 2025 Все права защищены</div>
+          <div class="footer-policy">
+              <a href="docs/Соглашение на обработку персональных данных.pdf">Соглашение на обработку персональных данных</a>
+              <a href="docs/Политика конфиденциальности.pdf">Политика конфиденциальности</a>
+              <a href="docs/Сведения об образовательной организации.pdf">Сведения об образовательной организации</a>
+              <a href="docs/Информация об оплате.pdf">Информация об оплате</a>
+          </div>
+          <div class="footer-social">
+              <a href="https://vk.com" target="_blank"><i class="fab fa-vk"></i></a>
+              <a href="https://t.me" target="_blank"><i class="fab fa-telegram"></i></a>
+          </div>
       </div>
-    </div>
-    <hr>
-    <div class="footer-bottom">
-      <div class="footer-copy">© 2025 Все права защищены</div>
-      <div class="footer-policy">
-        <a href="docs/Соглашение на обработку персональных данных.pdf">Соглашение на обработку персональных данных</a>
-        <a href="docs/Политика конфиденциальности.pdf">Политика конфиденциальности</a>
-        <a href="docs/Сведения об образовательной организации.pdf">Сведения об образовательной организации</a>
-        <a href="docs/Информация об оплате.pdf">Информация об оплате</a>
-      </div>
-      <div class="footer-social">
-        <a href="https://vk.com" target="_blank"><i class="fab fa-vk"></i></a>
-        <a href="https://t.me" target="_blank"><i class="fab fa-telegram"></i></a>
-      </div>
-    </div>
   </footer>
 
   <script src="js/main.js"></script>
+  <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        const courseWrap = document.querySelector('.directions-container');
+
+        // POST-запрос за всеми курсами и выводим их все
+        fetch('http://localhost:8080/api/courses', {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(r => {
+            if (!r.ok) throw new Error('Ошибка сети при загрузке курсов');
+            return r.json();
+        })
+        .then(json => {
+            const courses = Array.isArray(json.data) ? json.data : [];
+
+            courseWrap.innerHTML = '';
+            if (!courses.length) {
+            courseWrap.innerHTML = '<p style="text-align:center;color:#777;">Курсов нет</p>';
+            return;
+            }
+            courses.forEach(course => {
+            const div = document.createElement('div');
+            div.className = 'direction-block';
+            div.innerHTML = `
+                <img src="${course.image}" alt="${course.title}" class="direction-icon">
+                <h3>${course.title}</h3>`;
+            courseWrap.appendChild(div);
+            });
+        })
+        .catch(err => {
+            console.error(err);
+            courseWrap.innerHTML = '<p style="text-align:center;color:red;">Ошибка загрузки курсов</p>';
+        });
+        });
+    </script>
 </body>
 </html>
