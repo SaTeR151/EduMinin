@@ -42,6 +42,7 @@ type SQLiteManagerDB interface {
 	DeleteAuthorizationUser(login string) error
 	GetUserInfo(login string) (oldLogin string, oldPass string, err error)
 	Signup(login string, rt string) error
+	GetToken(login string) (rToken string, err error)
 }
 
 type SQLiteManager struct {
@@ -376,7 +377,6 @@ func (db *SQLiteManager) GetUserInfo(login string) (oldLogin string, oldPass str
 		}
 	}
 	return oldLogin, oldPass, err
-
 }
 
 func (db *SQLiteManager) Signup(login string, rt string) error {
@@ -385,4 +385,20 @@ func (db *SQLiteManager) Signup(login string, rt string) error {
 		sql.Named("refresh_token", rt),
 	)
 	return err
+}
+
+func (db *SQLiteManager) GetToken(login string) (rToken string, err error) {
+	rows, err := db.db.Query("SELECT refresh_token FROM auth WHERE login = :login", sql.Named("login", login))
+	if err != nil {
+		return rToken, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		err := rows.Scan(&rToken)
+		if err != nil {
+			return rToken, err
+
+		}
+	}
+	return rToken, err
 }

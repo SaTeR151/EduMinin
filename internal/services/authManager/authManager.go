@@ -9,6 +9,7 @@ import (
 	"github.com/SaTeR151/EduMinin/internal/controller/rest/dto"
 	"github.com/SaTeR151/EduMinin/internal/database/sqlite"
 	"github.com/SaTeR151/EduMinin/internal/utils"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/sirupsen/logrus"
 )
 
@@ -16,6 +17,8 @@ type AuthManagerService interface {
 	Register(data dto.UserData) (err error)
 	Signup(data dto.UserData, userAgent string, ip string) (aToken string, rToken string, err error)
 	Logout(aToken string) (err error)
+	RefreshTokens(at string, rt string, userAgent string, ip string) (aToken string, rToken string, err error)
+	CheckTokens(aToken string, rToken string) error
 }
 
 type AuthManager struct {
@@ -79,5 +82,65 @@ func (am *AuthManager) Signup(data dto.UserData, userAgent string, ip string) (a
 }
 
 func (am *AuthManager) Logout(aToken string) (err error) {
-	return err
+	login, err := utils.GetLoginFromJWT(aToken)
+	if err != nil {
+		return err
+	}
+	return am.db.DeleteAuthorizationUser(fmt.Sprintf("%x", sha256.Sum256([]byte(login))))
+}
+
+func (am *AuthManager) RefreshTokens(at string, rt string, userAgent string, ip string) (aToken string, rToken string, err error) {
+	logrus.Debug("refreshing tokens")
+
+	login, err := utils.GetLoginFromJWT(at)
+	if err != nil {
+		return aToken, rToken, err
+	}
+
+	ok, err := am.CompareRT(rt, login)
+	if err != nil {
+		return aToken, rToken, err
+	}
+	if !ok {
+		return aToken, rToken, apperror.ErrUnauthorized
+	}
+
+	logrus.Debug("generating new tokens")
+	aToken, rToken, err = utils.NewTokens(userAgent, login)
+	if err != nil {
+		return aToken, rToken, err
+	}
+
+	err = am.db.Signup(fmt.Sprintf("%x", sha256.Sum256([]byte(login))), fmt.Sprintf("%x", sha256.Sum256([]byte(rToken))))
+	if err != nil {
+		return aToken, rToken, err
+	}
+
+	logrus.Debug("tokens refreshed")
+	return aToken, rToken, nil
+}
+
+func (am *AuthManager) CompareRT(rToken, login string) (bool, error) {
+	rTokenOld, err := am.db.GetToken(fmt.Sprintf("%x", sha256.Sum256([]byte(login))))
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return false, apperror.ErrUnauthorized
+		}
+		return false, err
+	}
+	if fmt.Sprintf("%x", sha256.Sum256([]byte(rToken))) != rTokenOld {
+		return false, nil
+	}
+	return true, nil
+}
+
+func (am *AuthManager) CheckTokens(aToken string, rToken string) error {
+	err := utils.CheckLinkTokens(aToken, rToken)
+	if err != nil {
+		if err.Error() == "token has invalid claims: token is expired" {
+			return jwt.ErrTokenExpired
+		}
+		return err
+	}
+	return nil
 }

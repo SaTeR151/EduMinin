@@ -20,6 +20,11 @@ func Signup(services *services.Services) gin.HandlerFunc {
 			c.AbortWithStatusJSON(http.StatusBadRequest, dto.Error{Error: apperror.ErrIncorrectRequestBody.Error()})
 			return
 		}
+		if userData.Login == "" || userData.Pass == "" {
+			logrus.Warn(apperror.ErrIncorrectRequestBody)
+			c.AbortWithStatusJSON(http.StatusBadRequest, dto.Error{Error: apperror.ErrIncorrectRequestBody.Error()})
+			return
+		}
 		aToken, rToken, err := services.AuthManager.Signup(userData, c.Request.Header.Get("User-Agent"), c.ClientIP())
 		if err != nil {
 			if err == apperror.ErrUncorrectData {
@@ -51,7 +56,7 @@ func Logout(services *services.Services) gin.HandlerFunc {
 		err = services.AuthManager.Logout(atCookie.Value)
 		if err != nil {
 			logrus.Warn(err)
-			if err != apperror.ErrUnauthorized {
+			if err != apperror.ErrUserNotFound {
 				c.AbortWithStatusJSON(http.StatusInternalServerError, dto.Error{Error: err.Error()})
 				return
 			}
@@ -67,6 +72,11 @@ func Register(services *services.Services) gin.HandlerFunc {
 		var userData dto.UserData
 		if err := c.ShouldBindJSON(&userData); err != nil {
 			logrus.Warn(err)
+			c.AbortWithStatusJSON(http.StatusBadRequest, dto.Error{Error: apperror.ErrIncorrectRequestBody.Error()})
+			return
+		}
+		if userData.Login == "" || userData.Pass == "" {
+			logrus.Warn(apperror.ErrIncorrectRequestBody)
 			c.AbortWithStatusJSON(http.StatusBadRequest, dto.Error{Error: apperror.ErrIncorrectRequestBody.Error()})
 			return
 		}
