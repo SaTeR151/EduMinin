@@ -1,6 +1,4 @@
 ## Созданные ендпониты:
-# Новости news:
-
 1. /main - основная страница (index.html)
 2. /api/news [GET] - получение списка новостей
 {
@@ -20,7 +18,7 @@
   	Image string `json:"image"`
    },
 }
-3. /api/news/ [POST] - сохранение новости
+3. /api/news/ [POST] - сохранение новости (защищен)
 {
     Id    string `json:"id"`
   	Title string `json:"title"`
@@ -28,7 +26,7 @@
   	Date  string `json:"date"`
   	Image string `json:"image"`
 }
-4. /api/news/?id=... [DELETE] - удаление новости по id
+4. /api/news/?id=... [DELETE] - удаление новости по id (защищен)
 5. /api/courses [GET] - получение списка курсов
 {
   "data":
@@ -59,7 +57,7 @@
     Title string `json:"title"`
   },
 }
-8. /api/courses/ [POST] - сохранение курса
+8. /api/courses/ [POST] - сохранение курса (защищен)
 {
 	Id            string `json:"id"`
 	Title         string `json:"title"`
@@ -68,7 +66,7 @@
 	Price         string `json:"price"`
 	Image         string `json:"image"`
 }
-9. /api/courses/?id=... [DELETE] - удаление курс по id
+9. /api/courses/?id=... [DELETE] - удаление курс по id (защищен)
 
 10. /api/reviews [GET] - все отзывы
 Тело для отзывов:
@@ -79,17 +77,25 @@
 	Text   string `json:"text"`
 	Photo  string `json:"photo"`
 }
-11. /api/reviews/ [POST]
-12. /api/reviews/ [DELETE]
+11. /api/reviews/ [POST] (защищен)
+12. /api/reviews/ [DELETE] (защищен)
 
 13. /api/events [GET] - всё расписание
 
-14.  /api/reviews/ [POST]
-15.  /api/reviews/ [DELETE]
+14.  /api/reviews/ [POST] (защищен)
+15.  /api/reviews/ [DELETE] (защищен)
 
+## Про авторизацию:
+При попытке получить доступ к защищенной странице проверяется авторизация. В случае успеха - страница загружается. 
+Основные коды ошибок:
+- 404 в случае отсутствия тела запроса при регистрации/авторизации и в случае отсутствия куки при получении защищенной страницы
+- 401 - если неправильные куки при получении защищенной страницы; если неправильные данные при авторизации
+- 500 - если я рукожоп и где-то накосячил
+
+Эндпоинты: 
 16. /api/auth/register
 17. /api/auth/signup
-18. /api/auth/logout
+18. /api/auth/logout (щашишенный)
 
 
 
