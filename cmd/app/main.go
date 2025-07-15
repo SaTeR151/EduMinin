@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/SaTeR151/EduMinin/internal/config"
+	"github.com/SaTeR151/EduMinin/internal/controller/rest/middlewares"
 	restauth "github.com/SaTeR151/EduMinin/internal/controller/rest/restAuth"
 	restcourses "github.com/SaTeR151/EduMinin/internal/controller/rest/restCourses"
 	restevents "github.com/SaTeR151/EduMinin/internal/controller/rest/restEvents"
@@ -71,26 +72,26 @@ func main() {
 		apiGroup := router.Group("/api")
 		{
 			apiGroup.GET("/news", restnews.GetNews(services))
-			newsGroups := apiGroup.Group("/news")
+			newsGroups := apiGroup.Group("/news", middlewares.CheckAuthorization(services))
 			newsGroups.POST("/", restnews.PostNews(services))
 			newsGroups.DELETE("/", restnews.DeleteNews(services))
 		}
 		{
 			apiGroup.GET("/courses", restcourses.GetCourses(services))
 			apiGroup.GET("/courses/title", restcourses.GetCoursesTitle(services))
-			coursesGroups := apiGroup.Group("/courses")
+			coursesGroups := apiGroup.Group("/courses", middlewares.CheckAuthorization(services))
 			coursesGroups.POST("/", restcourses.PostCourse(services))
 			coursesGroups.DELETE("/", restcourses.DeleteCourse(services))
 		}
 		{
 			apiGroup.GET("/reviews", restreviews.GetReviews(services))
-			reviewsGroups := apiGroup.Group("/reviews")
+			reviewsGroups := apiGroup.Group("/reviews", middlewares.CheckAuthorization(services))
 			reviewsGroups.POST("/", restreviews.PostReview(services))
 			reviewsGroups.DELETE("/", restreviews.DeleteReview(services))
 		}
 		{
 			apiGroup.GET("/events", restevents.GetEvents(services))
-			eventsGroups := apiGroup.Group("/events")
+			eventsGroups := apiGroup.Group("/events", middlewares.CheckAuthorization(services))
 			eventsGroups.POST("/", restevents.PostEvent(services))
 			eventsGroups.DELETE("/", restevents.DeleteEvent(services))
 		}
@@ -98,7 +99,7 @@ func main() {
 			authGroup := apiGroup.Group("/auth")
 			authGroup.POST("/signup", restauth.Signup(services))
 			authGroup.POST("/register", restauth.Register(services))
-			authGroup.POST("/logout", restauth.Logout(services))
+			authGroup.POST("/logout", middlewares.CheckAuthorization(services), restauth.Logout(services))
 		}
 
 	}
