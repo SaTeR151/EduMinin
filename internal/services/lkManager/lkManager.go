@@ -8,6 +8,7 @@ import (
 	"github.com/SaTeR151/EduMinin/internal/controller/rest/dto"
 	"github.com/SaTeR151/EduMinin/internal/database/sqlite"
 	"github.com/SaTeR151/EduMinin/internal/utils"
+	"github.com/sirupsen/logrus"
 )
 
 type LkManagerService interface {
@@ -36,8 +37,10 @@ func (lkm *LkManager) GetLkInfo(aToken string) (dto.LK, error) {
 	login = fmt.Sprintf("%x", sha256.Sum256([]byte(login)))
 	lk, err = lkm.db.GetLKInfo(login)
 	if err != nil {
+		fmt.Println(123)
 		return lk, err
 	}
+	logrus.Debug("gettig user courses")
 	lk.Courses, err = lkm.db.GetUserCourses(login)
 	if err != nil {
 		return lk, err

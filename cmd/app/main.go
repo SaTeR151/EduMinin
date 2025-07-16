@@ -120,7 +120,6 @@ func main() {
 			authGroup.PUT("/changephone", restlk.PutPhone(services))
 			authGroup.POST("/addcourse", restlk.PostCourse(services))
 		}
-
 	}
 	if err := router.Run(":" + serverConfig.Port); err != nil {
 		logrus.Error(err)

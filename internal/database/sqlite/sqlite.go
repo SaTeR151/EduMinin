@@ -402,11 +402,12 @@ func (db *SQLiteManager) GetTokens(login string) (rTokens []string, err error) {
 	}
 	defer rows.Close()
 	for rows.Next() {
-		err := rows.Scan(&rTokens)
+		var str string
+		err := rows.Scan(&str)
 		if err != nil {
 			return rTokens, err
-
 		}
+		rTokens = append(rTokens, str)
 	}
 	return rTokens, err
 }
@@ -469,7 +470,7 @@ func (db *SQLiteManager) GetUserCourses(login string) ([]dto.Course, error) {
 
 func (db *SQLiteManager) GetLKInfo(login string) (dto.LK, error) {
 	var lk dto.LK
-	rows, err := db.db.Query("SELECT fio, photo, email, phone WHERE login = :login", sql.Named("login", login))
+	rows, err := db.db.Query("SELECT fio, photo, email, phone FROM users WHERE login = :login", sql.Named("login", login))
 	if err != nil {
 		return lk, err
 	}

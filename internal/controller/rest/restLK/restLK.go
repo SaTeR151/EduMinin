@@ -12,7 +12,7 @@ import (
 
 func GetLkInfo(services *services.Services) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		logrus.Info("getting lk ingo")
+		logrus.Info("getting lk info")
 		accessTCokie, err := c.Request.Cookie("EduMininAT")
 		if err != nil {
 			logrus.Error(err)

@@ -311,7 +311,7 @@
     let currentField; // 'name' | 'email' | 'phone'
 
     // 1) Загрузить данные профиля
-    fetch('http://localhost:8080/api/users', { method:'POST' })
+    fetch('http://localhost:8080/api/lk', { method:'GET' })
       .then(r=>r.json())
       .then(json=>{
         const u = json.data;
@@ -323,7 +323,7 @@
 
     // 2) Загрузить «мои курсы»
     function loadUserCourses(){
-      fetch('http://localhost:8080/api/userscourses', { method:'POST' })
+      fetch('http://localhost:8080/api/lk/userscourses', { method:'POST' })
         .then(r=>r.json())
         .then(json=>{
           coursesList.innerHTML = '';

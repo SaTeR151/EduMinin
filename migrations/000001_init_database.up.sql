@@ -38,10 +38,10 @@ CREATE TABLE users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     login TEXT UNIQUE,       
     pass TEXT,
-    fio TEXT,
-    photo TEXT,
-    email TEXT,
-    phone TEXT                     
+    fio TEXT    DEFAULT '',
+    photo TEXT DEFAULT '',
+    email TEXT DEFAULT '',
+    phone TEXT   DEFAULT ''                  
 );
 CREATE INDEX index_users_login ON users(login);
 
