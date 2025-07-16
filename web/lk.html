@@ -376,7 +376,7 @@ document.addEventListener('DOMContentLoaded', () => {
       enrollMessage.textContent = 'Пожалуйста, выберите курс';
       return;
     }
-    fetch('http://localhost:8080/api/signup', {
+    fetch('http://localhost:8080/api/lk/addcourse', {
       method:'POST',
       headers:{ 'Content-Type':'application/json' },
       body: JSON.stringify({ course })
@@ -417,7 +417,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if(!file) return;
     const reader = new FileReader();
     reader.onload = ()=>{
-      fetch('http://localhost:8080/api/changephoto', {
+      fetch('http://localhost:8080/api/lk/changephoto', {
         method:'POST',
         headers:{'Content-Type':'application/json'},
         body: JSON.stringify({ photo: reader.result })
@@ -447,7 +447,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if(currentField==='name')  url = 'changefio';
     if(currentField==='email') url = 'changeemail';
     if(currentField==='phone') url = 'changephone';
-    fetch(`http://localhost:8080/api/${url}`, {
+    fetch(`http://localhost:8080/api/lk/${url}`, {
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ [currentField]: val })
@@ -465,7 +465,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   document.getElementById('logout-btn').onclick = ()=> {
-    fetch('http://localhost:8080/api/exit', { method:'POST' })
+    fetch('http://localhost:8080/api/auth/logout', { method:'POST' })
       .then(_=> window.location.href = 'login.html');
   };
 });

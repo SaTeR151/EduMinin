@@ -91,7 +91,7 @@ func Register(services *services.Services) gin.HandlerFunc {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, dto.Error{Error: err.Error()})
 			return
 		}
-		c.AbortWithStatusJSON(http.StatusCreated, dto.Message{Message: "user registered"})
+		c.AbortWithStatusJSON(http.StatusCreated, dto.Message{Message: "Вход успешен!"})
 		logrus.Info("user registered")
 	}
 }

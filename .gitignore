@@ -1,2 +1,2 @@
 ./.gitignor
-cmd/app/data.db
+./SQLiteL/
