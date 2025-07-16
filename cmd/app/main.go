@@ -45,6 +45,9 @@ func main() {
 	router.Static("/main/assets", "./web/assets") // если они у вас есть
 	router.Static("/main/css", "./web/css")       // если они у вас есть
 	router.Static("/main/js", "./web/js")         // если они у вас есть
+	router.Static("/assets", "./web/assets")
+	router.Static("/css", "./web/css")
+	router.Static("/js", "./web/js")
 
 	// // 2. Правило «/main/<page> -> ./web/<page>.html»
 	router.GET("/main/:page", func(c *gin.Context) {
@@ -66,10 +69,6 @@ func main() {
 		} else {
 			c.File("./web/404.html")
 		}
-	})
-
-	router.NoRoute(func(c *gin.Context) {
-		c.File("./web/404.html")
 	})
 
 	// 3. Главная: /main/ (или просто /) → index.html
@@ -125,6 +124,11 @@ func main() {
 			authGroup.POST("/addcourse", restlk.PostCourse(services))
 		}
 	}
+
+	router.NoRoute(func(c *gin.Context) {
+		c.File("./web/404.html")
+	})
+
 	if err := router.Run(":" + serverConfig.Port); err != nil {
 		logrus.Error(err)
 		return

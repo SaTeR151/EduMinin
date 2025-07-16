@@ -135,14 +135,14 @@ document.addEventListener('DOMContentLoaded', () => {
       password: document.getElementById('login-password').value
     };
 
-    fetch('http://localhost:8080/api/auth/signup', {
+    fetch('http://codebrothers.ru/api/auth/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     })
     .then(res => {
       if (!res.ok) {
-        if (res.status === 401) throw new Error('Неверный логин или пароль');
+        if (res.status === 401 || res.status === 500) throw new Error('Неверный логин или пароль');
         throw new Error('Сервер вернул ошибку ' + res.status);
       }
       return res.json();

@@ -109,7 +109,7 @@
     document.addEventListener('DOMContentLoaded', function() {
       const select = document.getElementById('course');
       // Запрос списка курсов
-      fetch('http://localhost:8080/api/courses', {
+      fetch('http://localhost:80/api/courses', {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' }
       })
@@ -146,7 +146,7 @@
       const course   = document.getElementById('course').value;
       const msgEl    = document.getElementById('signup-message');
 
-      fetch('http://localhost:8080/api/signup', {
+      fetch('http://localhost:80/api/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ fullname, phone, email, course })

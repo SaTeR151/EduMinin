@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
       password: pwd.value
     };
 
-    fetch('http://localhost:8080/api/auth/register', {
+    fetch('http://codebrothers.ru/api/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
@@ -164,9 +164,9 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(json => {
       msgEl.style.color = '#28a745';
       msgEl.textContent = json.message || 'Регистрация прошла успешно!';
-      form.reset();
+      //form.reset();
       setTimeout(() => {
-          window.location.href = 'lk';
+          window.location.href = '/main/login';
       }, 500);
     })
     .catch(err => {

@@ -5,6 +5,7 @@ import (
 	"crypto/sha256"
 	"fmt"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/SaTeR151/EduMinin/internal/apperror"
@@ -32,12 +33,12 @@ func NewTokens(userAgent string, login string) (aToken string, rToken string, er
 	}
 
 	// create access token
-	// atTimeExp, err := strconv.Atoi(os.Getenv("ATEXPIRES"))
-	// if err != nil {
-	// 	return aToken, rToken, err
-	// }
+	atTimeExp, err := strconv.Atoi(os.Getenv("ATEXPIRES"))
+	if err != nil {
+		return aToken, rToken, err
+	}
 	claims := &jwt.MapClaims{
-		"exp":        time.Now().Add(time.Second * 3).Unix(), // time.Duration(atTimeExp)
+		"exp":        time.Now().Add(time.Second * time.Duration(atTimeExp)).Unix(),
 		"userAgent":  userAgent,
 		"login":      login,
 		"linkString": tokenLink,

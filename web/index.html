@@ -128,10 +128,7 @@
         const courseWrap = document.querySelector('.directions-container');
 
         // 1) POST-запрос за всеми новостями, сортируем по дате и берём 6 последних
-        fetch('http://localhost:8080/api/news', {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
-        })
+        fetch('/api/news')
         .then(r => {
             if (!r.ok) throw new Error('Ошибка сети при загрузке новостей');
             return r.json();
@@ -166,10 +163,7 @@
         });
 
         // 2) POST-запрос за всеми курсами и выводим их все
-        fetch('http://localhost:8080/api/courses', {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
-        })
+        fetch('/api/courses')
         .then(r => {
             if (!r.ok) throw new Error('Ошибка сети при загрузке курсов');
             return r.json();

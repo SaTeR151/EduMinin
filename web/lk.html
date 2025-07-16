@@ -188,6 +188,17 @@
       font-size: 0.95rem;
     }
   </style>
+  <script>
+  // в <head> или перед </body> – не важно, главное чтобы этот скрипт
+  // выполнился один раз и навесил обработчик на document
+  document.addEventListener('click', function(e) {
+    // если кликнули по кнопке смены фото
+    if (e.target && e.target.id === 'change-photo-btn') {
+      // просто прокидываем click в скрытый input[type=file]
+      document.getElementById('photo-input').click();
+    }
+  });
+</script>
 </head>
 <body>
   <!-- фиксированное меню -->
@@ -204,7 +215,7 @@
       </ul>
       <ul class="auth-links">
         <li>
-          <a href="lk" class="active"></a>
+          <a href="lk" class="active" id="log-act">Загрузка...</a>
         </li>
       </ul>
     </nav>
@@ -292,185 +303,494 @@
   <script src="js/main.js"></script>
   <script>
 document.addEventListener('DOMContentLoaded', () => {
+  // Проверяем, что все элементы на месте:
   const avatarImg   = document.getElementById('avatar');
   const nameEl      = document.getElementById('user-name');
   const emailEl     = document.getElementById('user-email');
   const phoneEl     = document.getElementById('user-phone');
   const coursesList = document.getElementById('courses-list');
+  const logact = document.getElementById('log-act');
+  
 
-  // Элементы блока «Записаться на курс»
-  const enrollSelect  = document.getElementById('enroll-select');
-  const enrollBtn     = document.getElementById('enroll-btn');
-  const enrollMessage = document.getElementById('enroll-message');
-
-  // Модалка редактирования
-  const modalBg     = document.getElementById('modal-bg');
-  const modalTitle  = document.getElementById('modal-title');
-  const modalInput  = document.getElementById('modal-input');
-  const modalSave   = document.getElementById('modal-save');
-  let currentField;
-
-  // 1) Единственный запрос: профиль + мои курсы
-  fetch('http://localhost:8080/api/lk', { method: 'GET' })
-    .then(res => {
-      if (res.status === 401) {
-        alert('Страница недоступна. Пожалуйста, войдите.');
-        window.location.href = 'login.html';
-        return Promise.reject('unauthorized');
-      }
-      if (!res.ok) {
-        throw new Error('Сервер: ' + res.status);
-      }
-      return res.json();
-    })
-    .then(json => {
-      const u = json.data;
-      // данные профиля
-      avatarImg.src       = u.photo;
-      nameEl.textContent  = u.name;
-      emailEl.textContent = u.email;
-      phoneEl.textContent = u.phone;
-
-      // «Мои курсы» — берем из u.courses
-      coursesList.innerHTML = '';
-      (u.courses || []).forEach(c => {
-        const div = document.createElement('div');
-        div.className = 'course-item';
-        div.innerHTML = `
-          <img src="${c.img}" alt="${c.title}">
-          <div class="course-info">
-            <h4>${c.title}</h4>
-            <p>${c.description||''}</p>
-          </div>`;
-        coursesList.appendChild(div);
-      });
-    })
-    .catch(err => {
-      console.error(err);
-      // если нужно — можно показать заглушку
-    });
-
-  // 2) Загрузка списка для записи (не меняется)
-  function fetchCoursesForEnroll(){
-    fetch('http://localhost:8080/api/courses', { method:'GET' })
-      .then(r=>r.json())
-      .then(json=>{
-        enrollSelect.innerHTML = '<option value="" disabled selected>Выберите курс</option>';
-        json.data.forEach(c=>{
-          const opt = document.createElement('option');
-          opt.value       = c.id;
-          opt.textContent = c.title;
-          enrollSelect.appendChild(opt);
-        });
-      })
-      .catch(()=>{
-        enrollSelect.innerHTML = '<option value="" disabled>Ошибка загрузки</option>';
-      });
+  if (!avatarImg || !nameEl || !emailEl || !phoneEl || !coursesList) {
+    console.error('Один из элементов профиля не найден в DOM');
+    return;
   }
-  fetchCoursesForEnroll();
 
-  enrollBtn.addEventListener('click', () => {
-    const course = enrollSelect.value;
-    if(!course){
-      enrollMessage.style.color = '#d9534f';
-      enrollMessage.textContent = 'Пожалуйста, выберите курс';
-      return;
+  fetch('/api/lk', { method: 'GET' })
+  .then(res => {
+    if (res.status === 401) {
+      alert('Нужно войти в систему');
+      window.location.href = '/main/login';
+      throw new Error('unauthorized');
     }
-    fetch('http://localhost:8080/api/signup', {
-      method:'POST',
-      headers:{ 'Content-Type':'application/json' },
-      body: JSON.stringify({ course })
-    })
-    .then(r=>r.json())
-    .then(json=>{
-      enrollMessage.style.color = '#28a745';
-      enrollMessage.textContent = json.message || 'Запись успешна!';
-      // после записи — обновить «мои курсы» из /api/lk
-      return fetch('http://localhost:8080/api/lk', { method: 'GET' });
-    })
-    .then(r=> r.ok ? r.json() : Promise.reject('Ошибка обновления'))
-    .then(json=>{
-      coursesList.innerHTML = '';
-      (json.data.courses||[]).forEach(c=>{
-        const div = document.createElement('div');
-        div.className = 'course-item';
-        div.innerHTML = `
-          <img src="${c.img}" alt="${c.title}">
-          <div class="course-info">
-            <h4>${c.title}</h4>
-            <p>${c.description||''}</p>
-          </div>`;
-        coursesList.appendChild(div);
-      });
-    })
-    .catch(err=>{
-      console.warn(err);
+    if (!res.ok) {
+      throw new Error('Ошибка сервера: ' + res.status);
+    }
+    return res.json();
+  })
+  .then(json => {
+    console.log('Профиль пользователя:', json);  // <-- вот здесь обязательно посмотрите в консоли, что реально приходит
+
+    const u = json;
+    avatarImg.src               = u.photo;
+    nameEl.textContent          = u.fio;
+    logact.textContent = u.fio;
+    emailEl.textContent         = u.email;
+    phoneEl.textContent         = u.phone;
+
+    // «Мои курсы»
+    coursesList.innerHTML = '';
+    (u.courses || []).forEach(c => {
+      const div = document.createElement('div');
+      div.className = 'course-item';
+      div.innerHTML = `
+        <img src="${c.image}" alt="${c.title}">
+        <div class="course-info">
+          <h4>${c.title}</h4>
+          <p>${c.description||''}</p>
+        </div>`;
+      coursesList.appendChild(div);
     });
-  });
-
-  // … дальше без изменений: смена фото, модалка редактирования, выход …
-  document.getElementById('change-photo-btn').onclick = _=>{
-    document.getElementById('photo-input').click();
-  };
-  document.getElementById('photo-input').onchange = e=>{
-    const file = e.target.files[0];
-    if(!file) return;
-    const reader = new FileReader();
-    reader.onload = ()=>{
-      fetch('http://localhost:8080/api/changephoto', {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ photo: reader.result })
-      })
-      .then(r=>r.json())
-      .then(json=>{
-        avatarImg.src = json.data.photo;
-      });
-    };
-    reader.readAsDataURL(file);
-  };
-
-  function openModal(field, label){
-    currentField = field;
-    modalTitle.textContent = 'Изменить ' + label;
-    modalInput.value = document.getElementById('user-'+field).textContent.trim();
-    modalBg.style.display = 'flex';
-  }
-  document.getElementById('change-fio-btn').onclick   = ()=>openModal('name','имя');
-  document.getElementById('change-email-btn').onclick = ()=>openModal('email','email');
-  document.getElementById('change-phone-btn').onclick = ()=>openModal('phone','телефон');
-
-  modalSave.onclick = ()=>{
-    const val = modalInput.value.trim();
-    if(!val) return;
-    let url = '';
-    if(currentField==='name')  url = 'changefio';
-    if(currentField==='email') url = 'changeemail';
-    if(currentField==='phone') url = 'changephone';
-    fetch(`http://localhost:8080/api/${url}`, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ [currentField]: val })
-    })
-    .then(r=>r.json())
-    .then(json=>{
-      document.getElementById('user-'+currentField)
-              .textContent = json.data[currentField];
-      modalBg.style.display = 'none';
-    });
-  };
-
-  modalBg.onclick = e=>{
-    if(e.target===modalBg) modalBg.style.display = 'none';
-  };
-
-  document.getElementById('logout-btn').onclick = ()=> {
-    fetch('http://localhost:8080/api/exit', { method:'POST' })
-      .then(_=> window.location.href = 'login.html');
-  };
+  })
+  .catch(err => console.error(err));
 });
 </script>
 
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  const fileInput = document.getElementById('photo-input');
+  if (!fileInput) {
+    console.error('photo-input не найден');
+    return;
+  }
+
+  fileInput.addEventListener('change', function(e) {
+    console.log('change fired!');
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      fetch('/api/lk/changephoto', {
+        method:'PUT',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ changing: reader.result })
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Ошибка сервера: ${response.status}`);
+        }
+        // Сервер не возвращает тело — считаем, что всё прошло успешно
+       // avatarImg.src = dataUrl;
+        document.getElementById('avatar').src = reader.result;
+      })
+    };
+    reader.readAsDataURL(file);
+    
+  });
+
+  //     fetch('/api/lk/changephoto', {
+  //       method: 'PUT',
+  //       credentials: 'include',
+  //       headers: { 'Changing': 'application/json'},
+  //       body: JSON.stringify({ photo: base64 })
+  //     })
+  //     .then(res => {
+  //       if (!res.ok) throw new Error('Ошибка ' + res.status);
+  //       return res.json();
+  //     })
+  //     .then(json => {
+  //       document.getElementById('avatar').src = json.data.photo || base64;
+  //       alert('Фото профиля успешно обновлено');
+  //     })
+  //     .catch(err => {
+  //       console.error(err);
+  //       alert('Не удалось обновить фото');
+  //     });
+  //   };
+  //   reader.readAsDataURL(file);
+  // });
+});
+</script>
+
+<script>
+function showChangeNameModal(onSave) {
+  // Оверлей
+  const overlay = document.createElement('div');
+  Object.assign(overlay.style, {
+    position:'fixed', top:0, left:0, right:0, bottom:0,
+    background:'rgba(0,0,0,0.5)', display:'flex',
+    alignItems:'center', justifyContent:'center', zIndex:1000
+  });
+
+  // Контейнер модалки
+  const modal = document.createElement('div');
+  Object.assign(modal.style, {
+    background:'#fff', padding:'20px', borderRadius:'5px',
+    width:'300px', boxSizing:'border-box',
+    boxShadow:'0 2px 10px rgba(0,0,0,0.1)'
+  });
+
+  // Заголовок
+  const title = document.createElement('h2');
+  title.textContent = 'Сменить имя';
+  title.style.marginTop = 0;
+
+  // Поле ввода
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.placeholder = 'Новое имя';
+  Object.assign(input.style, {
+    width:'100%', padding:'8px', margin:'10px 0', boxSizing:'border-box'
+  });
+
+  // Кнопки
+  const btnSave = document.createElement('button');
+  btnSave.textContent = 'Сохранить';
+  btnSave.style.marginRight = '10px';
+
+  const btnCancel = document.createElement('button');
+  btnCancel.textContent = 'Отмена';
+
+  modal.append(title, input, btnSave, btnCancel);
+  overlay.append(modal);
+  document.body.append(overlay);
+
+  // Закрытие модалки
+  function close() { overlay.remove(); }
+  btnCancel.addEventListener('click', close);
+
+  // Обработка «Сохранить»
+  btnSave.addEventListener('click', () => {
+    const newName = input.value.trim();
+    if (!newName) {
+      alert('Имя не может быть пустым');
+      return;
+    }
+    onSave(newName);
+    close();
+  });
+}
+
+// Привязываем модалку к кнопке
+document.getElementById('change-fio-btn')
+  .addEventListener('click', () => {
+    showChangeNameModal(newName => {
+      // Отправляем только новое имя
+      fetch('/api/lk/changefio', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ changing: newName })
+      })
+      .then(data => {
+        //alert('Имя успешно обновлено на сервере');
+        // при необходимости обновить UI на странице:
+        document.getElementById('user-name').textContent = newName;
+        document.getElementById('log-act').textContent = newName;
+      })
+      .catch(err => {
+        console.error(err);
+        alert('Не удалось сохранить имя: ' + err.message);
+      });
+    });
+  });
+</script>
+
+<script>
+// Функция показа модалки для изменения e‑mail
+function showChangeEmailModal(onSave) {
+  // Оверлей
+  const overlay = document.createElement('div');
+  Object.assign(overlay.style, {
+    position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+    background: 'rgba(0,0,0,0.5)', display: 'flex',
+    alignItems: 'center', justifyContent: 'center', zIndex: 1000
+  });
+
+  // Контейнер модалки
+  const modal = document.createElement('div');
+  Object.assign(modal.style, {
+    background: '#fff', padding: '20px', borderRadius: '5px',
+    width: '320px', boxSizing: 'border-box',
+    boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+  });
+
+  // Заголовок
+  const title = document.createElement('h2');
+  title.textContent = 'Сменить e‑mail';
+  title.style.marginTop = '0';
+
+  // Поле ввода
+  const input = document.createElement('input');
+  input.type = 'email';
+  input.placeholder = 'Новый e‑mail';
+  Object.assign(input.style, {
+    width: '100%', padding: '8px', margin: '12px 0', boxSizing: 'border-box'
+  });
+
+  // Кнопки
+  const btnSave = document.createElement('button');
+  btnSave.textContent = 'Сохранить';
+  btnSave.style.marginRight = '10px';
+
+  const btnCancel = document.createElement('button');
+  btnCancel.textContent = 'Отмена';
+
+  // Собираем модалку
+  modal.append(title, input, btnSave, btnCancel);
+  overlay.append(modal);
+  document.body.append(overlay);
+
+  // Закрытие
+  function close() { overlay.remove(); }
+  btnCancel.addEventListener('click', close);
+
+  // Обработка «Сохранить»
+  btnSave.addEventListener('click', () => {
+    const newEmail = input.value.trim();
+    // Базовая валидация e‑mail
+    if (!newEmail) {
+      alert('E‑mail не может быть пустым');
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) {
+      alert('Неверный формат e‑mail');
+      return;
+    }
+    onSave(newEmail);
+    close();
+  });
+}
+
+// Привязываем к кнопке смены e‑mail
+document.getElementById('change-email-btn')
+  .addEventListener('click', () => {
+    showChangeEmailModal(newEmail => {
+      fetch('/api/lk/changeemail', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ changing: newEmail })
+      })
+      .then(response => {
+        if (!response.ok) throw new Error(`Сервер вернул ${response.status}`);
+        alert('E‑mail успешно обновлён');
+        // Обновляем отображение на странице
+        const emailDisplay = document.getElementById('user-email');
+        if (emailDisplay) {
+          emailDisplay.textContent = newEmail;
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        alert('Не удалось сохранить e‑mail: ' + err.message);
+      });
+    });
+  });
+</script>
+
+<script>
+// Функция показа модалки для изменения телефона
+function showChangePhoneModal(onSave) {
+  // Оверлей
+  const overlay = document.createElement('div');
+  Object.assign(overlay.style, {
+    position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+    background: 'rgba(0,0,0,0.5)', display: 'flex',
+    alignItems: 'center', justifyContent: 'center', zIndex: 1000
+  });
+
+  // Контейнер модалки
+  const modal = document.createElement('div');
+  Object.assign(modal.style, {
+    background: '#fff', padding: '20px', borderRadius: '5px',
+    width: '320px', boxSizing: 'border-box',
+    boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+  });
+
+  // Заголовок
+  const title = document.createElement('h2');
+  title.textContent = 'Сменить телефон';
+  title.style.marginTop = '0';
+
+  // Поле ввода
+  const input = document.createElement('input');
+  input.type = 'tel';
+  input.placeholder = 'Новый телефон';
+  Object.assign(input.style, {
+    width: '100%', padding: '8px', margin: '12px 0', boxSizing: 'border-box'
+  });
+
+  // Кнопки
+  const btnSave = document.createElement('button');
+  btnSave.textContent = 'Сохранить';
+  btnSave.style.marginRight = '10px';
+
+  const btnCancel = document.createElement('button');
+  btnCancel.textContent = 'Отмена';
+
+  // Собираем модалку
+  modal.append(title, input, btnSave, btnCancel);
+  overlay.append(modal);
+  document.body.append(overlay);
+
+  // Закрытие
+  function close() { overlay.remove(); }
+  btnCancel.addEventListener('click', close);
+
+  // Обработка «Сохранить»
+  btnSave.addEventListener('click', () => {
+    const newPhone = input.value.trim();
+    // Базовая валидация телефона: цифры, пробелы, дефисы и +
+    if (!newPhone) {
+      alert('Телефон не может быть пустым');
+      return;
+    }
+    if (!/^[\d+\-\s]+$/.test(newPhone)) {
+      alert('Неверный формат телефона');
+      return;
+    }
+    onSave(newPhone);
+    close();
+  });
+}
+
+// Привязываем к кнопке смены телефона
+document.getElementById('change-phone-btn')
+  .addEventListener('click', () => {
+    showChangePhoneModal(newPhone => {
+      fetch('/api/lk/changephone', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ changing: newPhone })
+      })
+      .then(response => {
+        if (!response.ok) throw new Error(`Сервер вернул ${response.status}`);
+        alert('Телефон успешно обновлён');
+        // Обновляем отображение на странице
+        const phoneDisplay = document.getElementById('user-phone');
+        if (phoneDisplay) {
+          phoneDisplay.textContent = newPhone;
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        alert('Не удалось сохранить телефон: ' + err.message);
+      });
+    });
+  });
+</script>
+
+<script>
+document.getElementById('logout-btn')
+  .addEventListener('click', () => {
+    // Отправляем запрос на выход
+    fetch('/api/auth/logout', {
+      method: 'POST',            // или 'GET', в зависимости от вашего API
+      credentials: 'include'     // чтобы передать куки при необходимости
+    })
+    .then(response => {
+      window.location.href = '/main/login';
+    })
+    .catch(err => {
+      console.error('Ошибка при выходе:', err);
+      alert('Не удалось выйти: ' + err.message);
+    });
+  });
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const select = document.getElementById('enroll-select');
+  if (!select) {
+    console.error('enroll-select не найден');
+    return;
+  }
+
+  // Показать placeholder загрузки
+  select.innerHTML = '<option value="" disabled selected>Загрузка курсов…</option>';
+
+  fetch('/api/courses', {
+    method: 'GET',
+    headers: { 'Accept': 'application/json' },
+    credentials: 'include'
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`Ошибка загрузки: ${response.status}`);
+    }
+    return response.json();
+  })
+  .then(json => {
+    // API отдаёт объект { data: [ ... ] }
+    const courses = Array.isArray(json.data) ? json.data : [];
+
+    if (courses.length === 0) {
+      select.innerHTML = '<option value="" disabled>Нет доступных курсов</option>';
+      return;
+    }
+
+    // Сбросить placeholder и добавить приглашение выбрать
+    select.innerHTML = '<option value="" disabled selected>Выберите курс…</option>';
+
+    courses.forEach(course => {
+      const opt = document.createElement('option');
+      opt.value = course.id;         // id курса как value
+      opt.textContent = course.title; // отображаемое название — title
+      select.appendChild(opt);
+    });
+  })
+  .catch(err => {
+    console.error(err);
+    select.innerHTML = '<option value="" disabled selected>Не удалось загрузить курсы</option>';
+  });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const btnEnroll = document.getElementById('enroll-btn');
+  const select   = document.getElementById('enroll-select');
+
+  if (!btnEnroll || !select) {
+    console.error('enroll-btn или enroll-select не найдены');
+    return;
+  }
+
+  btnEnroll.addEventListener('click', () => {
+    const courseId = select.value;
+    if (!courseId) {
+      alert('Пожалуйста, выберите курс');
+      return;
+    }
+
+    fetch('/api/lk/addcourse', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify({ id: courseId })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Сервер вернул ${response.status}`);
+      }
+      return response.json().catch(() => ({})); // если тело пустое
+    })
+    .then(() => {
+      //alert('Вы успешно записались на курс!');
+      window.location.reload();
+    })
+    .catch(err => {
+      console.error('Ошибка при записи на курс:', err);
+      alert('Не удалось записаться на курс: ' + err.message);
+    });
+  });
+});
+</script>
 
 </body>
 </html>

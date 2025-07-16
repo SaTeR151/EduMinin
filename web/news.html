@@ -124,7 +124,7 @@
       const overlay   = document.getElementById('news-overlay');
       const modal     = document.getElementById('news-modal');
 
-      fetch('http://localhost:8080/api/news')
+      fetch('api/news')
         .then(res => {
           if (!res.ok) throw new Error('Ошибка сети');
           return res.json();

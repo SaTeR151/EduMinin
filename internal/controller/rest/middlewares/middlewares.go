@@ -19,33 +19,43 @@ func CheckAuthorization(services *services.Services) gin.HandlerFunc {
 		rtCookie, err := c.Request.Cookie("EduMininRT")
 		if err != nil {
 			logrus.Error(err)
-			c.AbortWithStatus(http.StatusUnauthorized)
+			//c.AbortWithStatus(http.StatusUnauthorized)
+			c.Redirect(http.StatusFound, "/main/login") // +
+			c.Abort()                                   // +
 			return
 		}
 		rTokenCookie, err := url.QueryUnescape(rtCookie.Value)
 		if err != nil {
 			logrus.Error(err)
-			c.AbortWithStatus(http.StatusBadRequest)
+			//c.AbortWithStatus(http.StatusBadRequest)
+			c.Redirect(http.StatusFound, "/main/login") // +
+			c.Abort()                                   // +
 			return
 		}
 		gettingRTBase64, err := base64.StdEncoding.DecodeString(rTokenCookie)
 		if err != nil {
 			logrus.Error(err)
-			c.AbortWithStatus(http.StatusBadRequest)
+			//c.AbortWithStatus(http.StatusBadRequest)
+			c.Redirect(http.StatusFound, "/main/login") // +
+			c.Abort()                                   // +
 			return
 		}
 
 		accessTCokie, err := c.Request.Cookie("EduMininAT")
 		if err != nil {
 			logrus.Error(err)
-			c.AbortWithStatus(http.StatusUnauthorized)
+			//c.AbortWithStatus(http.StatusUnauthorized)
+			c.Redirect(http.StatusFound, "/main/login") // +
+			c.Abort()                                   // +
 			return
 		}
 
 		if err = services.AuthManager.CheckTokens(accessTCokie.Value, string(gettingRTBase64)); err != nil {
 			if err != jwt.ErrTokenExpired {
 				logrus.Error(err)
-				c.AbortWithStatus(http.StatusUnauthorized)
+				//c.AbortWithStatus(http.StatusUnauthorized)
+				c.Redirect(http.StatusFound, "/main/login") // +
+				c.Abort()                                   // +
 				return
 			}
 			logrus.Info("access token expired")
@@ -53,10 +63,14 @@ func CheckAuthorization(services *services.Services) gin.HandlerFunc {
 			if err != nil {
 				logrus.Warn(err)
 				if err == apperror.ErrUnauthorized {
-					c.AbortWithStatus(http.StatusUnauthorized)
+					//c.AbortWithStatus(http.StatusUnauthorized)
+					c.Redirect(http.StatusFound, "/main/login") // +
+					c.Abort()                                   // +
 					return
 				}
-				c.AbortWithStatus(http.StatusInternalServerError)
+				//c.AbortWithStatus(http.StatusInternalServerError)
+				c.Redirect(http.StatusFound, "/main/login") // +
+				c.Abort()                                   // +
 				return
 			}
 			restutils.SetCookieTokens(c, aToken, rToken)
