@@ -103,10 +103,10 @@ func main() {
 		}
 		{
 			authGroup := apiGroup.Group("/user", middlewares.CheckAuthorization(services))
-			authGroup.POST("/changefio", restauth.Signup(services))
-			authGroup.POST("/changephoto", restauth.Register(services))
-			authGroup.POST("/changeemail", restauth.Logout(services))
-			authGroup.POST("/changephone", restauth.Logout(services))
+			authGroup.PUT("/changefio", restauth.Signup(services))
+			authGroup.PUT("/changephoto", restauth.Register(services))
+			authGroup.PUT("/changeemail", restauth.Logout(services))
+			authGroup.PUT("/changephone", restauth.Logout(services))
 
 		}
 
