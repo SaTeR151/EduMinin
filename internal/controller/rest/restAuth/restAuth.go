@@ -27,7 +27,7 @@ func Signup(services *services.Services) gin.HandlerFunc {
 		}
 		aToken, rToken, err := services.AuthManager.Signup(userData, c.Request.Header.Get("User-Agent"), c.ClientIP())
 		if err != nil {
-			if err == apperror.ErrUncorrectData {
+			if err == apperror.ErrUserNotFound {
 				logrus.Warn(err)
 				c.AbortWithStatusJSON(401, dto.Error{Error: err.Error()})
 				return

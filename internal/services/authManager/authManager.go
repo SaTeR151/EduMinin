@@ -50,7 +50,7 @@ func (am *AuthManager) Signup(data dto.UserData, userAgent string, ip string) (a
 		return aToken, rToken, err
 	}
 	if oldLogin != login || oldPass != fmt.Sprintf("%x", sha256.Sum256([]byte(data.Pass))) {
-		return aToken, rToken, apperror.ErrUserNotFound
+		return aToken, rToken, apperror.ErrUncorrectData
 
 	}
 	logrus.Debug("checking user authorization")
