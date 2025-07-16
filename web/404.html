@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>404 — Страница не найдена</title>
+  <link rel="icon" type="image/png" href="assets/icons/favicon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+    body {
+      /* фон всей страницы */
+      background: url('assets/images/404-bg.jpg') center/cover no-repeat;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: #fff;
+    }
+    h1 {
+      font-size: 10rem;
+      margin: 0;
+      color: var(--primary-4);
+      text-shadow: 10px 0px rgba(0, 0, 0, 0.8);
+    }
+    video {
+      width: 12.5%;
+      max-width: 200px;
+      margin: 20px 0;
+      border-radius: var(--border-radius);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    p {
+      font-size: 2rem;
+      color: blueviolet;
+      margin: 20px 0;
+    }
+    button {
+      padding: 12px 24px;
+      border: none;
+      border-radius: var(--border-radius);
+      background: var(--secondaryA-4);
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+    button:hover {
+      background: var(--secondaryA-1);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 6rem;
+      }
+      video {
+        width: 50%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>404</h1>
+    <video
+        src="assets/rickroll.mp4"
+        type="video/mp4"
+        autoplay
+        loop
+        controls
+        playsinline
+        style="width:50%; max-width:600px; margin:20px 0; border-radius:var(--border-radius); box-shadow:0 4px 12px rgba(0,0,0,0.3);">
+        Ваш браузер не поддерживает видео.
+    </video>
+  <p>Запрашиваемая страница не найдена 😢</p>
+  <button onclick="history.back()">Вернуться назад</button>
+  <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const vid = document.querySelector('video');
+            vid.muted = false;
+            vid.play().catch(() => {
+                // если автоплей со звуком не разрешён — можно показать сообщение
+                console.warn('Автоплей звука заблокирован браузером');
+                });
+            });
+  </script>
+</body>
+</html>
