@@ -150,6 +150,43 @@
       background:var(--secondaryA-4); color:#fff;
       cursor:pointer;
     }
+    .enroll-section {
+      background: #fff;
+      padding: 20px;
+      border-radius: var(--border-radius);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+    .enroll-section h3 {
+      margin-top: 0;
+      color: var(--primary-3);
+      font-size: 1.2rem;
+    }
+    .enroll-section select {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: var(--border-radius);
+    }
+    .enroll-section button {
+      display: inline-block;
+      padding: 12px 24px;
+      background: var(--secondaryB-1);
+      color: #fff;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+    .enroll-section button:hover {
+      background: var(--secondaryB-2);
+    }
+    #enroll-message {
+      margin-top: 10px;
+      font-size: 0.95rem;
+    }
   </style>
 </head>
 <body>
@@ -163,7 +200,6 @@
           <li><a href="index" class="active">Главная</a></li>
           <li><a href="news">Новости</a></li>
           <li><a href="reviews">Отзывы</a></li>
-          <li><a href="signup">Запись</a></li>
           <li><a href="about">О нас</a></li>
       </ul>
       <ul class="auth-links">
@@ -200,6 +236,15 @@
       <p><strong>Email:</strong> <span id="user-email">–</span></p>
       <p><strong>Телефон:</strong> <span id="user-phone">–</span></p>
 
+      <div class="enroll-section">
+        <h3>Записаться на курс</h3>
+        <select id="enroll-select">
+          <option value="" disabled selected>Загрузка курсов…</option>
+        </select>
+        <button id="enroll-btn">Записаться</button>
+        <div id="enroll-message"></div>
+      </div>
+
       <h3>Мои курсы</h3>
       <div class="my-courses-list" id="courses-list">
         <!-- сюда JS подставит блоки -->
@@ -218,7 +263,6 @@
             <div class="footer-links">
                 <a href="catalog">Каталог курсов</a>
                 <a href="schedule">Расписание</a>
-                <a href="signup">Запись</a>
                 <a href="about">О нас</a>
                 <a href="reviews">Отзывы</a>
             </div>
@@ -254,42 +298,93 @@
     const phoneEl     = document.getElementById('user-phone');
     const coursesList = document.getElementById('courses-list');
 
+    // Элементы нового блока
+    const enrollSelect  = document.getElementById('enroll-select');
+    const enrollBtn     = document.getElementById('enroll-btn');
+    const enrollMessage = document.getElementById('enroll-message');
+
     // Всплывающее модальное окно
     const modalBg     = document.getElementById('modal-bg');
-    const modal       = document.getElementById('modal');
     const modalTitle  = document.getElementById('modal-title');
     const modalInput  = document.getElementById('modal-input');
     const modalSave   = document.getElementById('modal-save');
-    let currentField; // 'fio' | 'email' | 'phone'
+    let currentField; // 'name' | 'email' | 'phone'
 
-    // Загрузить данные профиля
+    // 1) Загрузить данные профиля
     fetch('http://localhost:8080/api/users', { method:'POST' })
       .then(r=>r.json())
       .then(json=>{
         const u = json.data;
-        avatarImg.src   = u.photo;
+        avatarImg.src       = u.photo;
         nameEl.textContent  = u.name;
         emailEl.textContent = u.email;
         phoneEl.textContent = u.phone;
       });
 
-    // Загрузить «мои курсы»
-    fetch('http://localhost:8080/api/userscourses', { method:'POST' })
+    // 2) Загрузить «мои курсы»
+    function loadUserCourses(){
+      fetch('http://localhost:8080/api/userscourses', { method:'POST' })
+        .then(r=>r.json())
+        .then(json=>{
+          coursesList.innerHTML = '';
+          json.data.forEach(c=>{
+            const div = document.createElement('div');
+            div.className = 'course-item';
+            div.innerHTML = `
+              <img src="${c.img}" alt="${c.title}">
+              <div class="course-info">
+                <h4>${c.title}</h4>
+                <p>${c.description||''}</p>
+              </div>`;
+            coursesList.appendChild(div);
+          });
+        });
+    }
+    loadUserCourses();
+
+    // 3) Загрузить список курсов для записи
+    function fetchCoursesForEnroll(){
+      fetch('http://localhost:8080/api/courses', { method:'GET' })
+        .then(r=>r.json())
+        .then(json=>{
+          enrollSelect.innerHTML = '<option value="" disabled selected>Выберите курс</option>';
+          json.data.forEach(c=>{
+            const opt = document.createElement('option');
+            opt.value       = c.id;
+            opt.textContent = c.title;
+            enrollSelect.appendChild(opt);
+          });
+        })
+        .catch(()=>{
+          enrollSelect.innerHTML = '<option value="" disabled>Ошибка загрузки</option>';
+        });
+    }
+    fetchCoursesForEnroll();
+
+    // 4) Обработчик кнопки «Записаться»
+    enrollBtn.addEventListener('click', () => {
+      const course = enrollSelect.value;
+      if(!course){
+        enrollMessage.style.color = '#d9534f';
+        enrollMessage.textContent = 'Пожалуйста, выберите курс';
+        return;
+      }
+      fetch('http://localhost:8080/api/signup', {
+        method:'POST',
+        headers:{ 'Content-Type':'application/json' },
+        body: JSON.stringify({ course })
+      })
       .then(r=>r.json())
       .then(json=>{
-        coursesList.innerHTML = '';
-        json.data.forEach(c=>{
-          const div = document.createElement('div');
-          div.className = 'course-item';
-          div.innerHTML = `
-            <img src="${c.img}" alt="${c.title}">
-            <div class="course-info">
-              <h4>${c.title}</h4>
-              <p>${c.description||''}</p>
-            </div>`;
-          coursesList.appendChild(div);
-        });
+        enrollMessage.style.color = '#28a745';
+        enrollMessage.textContent = json.message || 'Запись успешна!';
+        loadUserCourses();  // обновить список «Мои курсы»
+      })
+      .catch(()=>{
+        enrollMessage.style.color = '#d9534f';
+        enrollMessage.textContent = 'Ошибка при записи';
       });
+    });
 
     // — Сменить фото —
     document.getElementById('change-photo-btn').onclick = _=>{
@@ -299,16 +394,15 @@
       const file = e.target.files[0];
       if(!file) return;
       const reader = new FileReader();
-      reader.onload = ()=> {
-        const b64 = reader.result;
+      reader.onload = ()=>{
         fetch('http://localhost:8080/api/changephoto', {
           method:'POST',
           headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ photo: b64 })
+          body: JSON.stringify({ photo: reader.result })
         })
         .then(r=>r.json())
         .then(json=>{
-          avatarImg.src = json.data.photo; // обновлённый URL или b64
+          avatarImg.src = json.data.photo;
         });
       };
       reader.readAsDataURL(file);
@@ -329,7 +423,7 @@
     modalSave.onclick = ()=>{
       const val = modalInput.value.trim();
       if(!val) return;
-      let url;
+      let url = '';
       if(currentField==='name')  url = 'changefio';
       if(currentField==='email') url = 'changeemail';
       if(currentField==='phone') url = 'changephone';
@@ -354,9 +448,10 @@
     // Выход из кабинета
     document.getElementById('logout-btn').onclick = ()=>{
       fetch('http://localhost:8080/api/exit', { method:'POST' })
-        .then(_=> window.location.href = '/' );
+        .then(_=> window.location.href = '/');
     };
   });
   </script>
+
 </body>
 </html>
