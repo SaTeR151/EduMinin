@@ -101,6 +101,14 @@ func main() {
 			authGroup.POST("/register", restauth.Register(services))
 			authGroup.POST("/logout", middlewares.CheckAuthorization(services), restauth.Logout(services))
 		}
+		{
+			authGroup := apiGroup.Group("/user", middlewares.CheckAuthorization(services))
+			authGroup.POST("/changefio", restauth.Signup(services))
+			authGroup.POST("/changephoto", restauth.Register(services))
+			authGroup.POST("/changeemail", restauth.Logout(services))
+			authGroup.POST("/changephone", restauth.Logout(services))
+
+		}
 
 	}
 	if err := router.Run(":" + serverConfig.Port); err != nil {
