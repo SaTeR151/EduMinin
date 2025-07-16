@@ -288,6 +288,9 @@ body {
   flex-direction: column;
   margin-bottom: 20px;
 }
+.footer-links h4 {
+  margin-bottom: 10px;
+}
 .footer-links a, .footer-centers p, .footer-centers h4 {
   color: #fff;
   text-decoration: none;
