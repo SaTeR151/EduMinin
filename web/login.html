@@ -152,6 +152,9 @@ document.addEventListener('DOMContentLoaded', () => {
       msgEl.textContent = json.message || 'Успешный вход!';
       // При необходимости перенаправляем:
       // window.location.href = '/dashboard.php';
+      setTimeout(() => {
+        window.location.href = 'lk';
+  }, 500);
     })
     .catch(err => {
       console.error(err);

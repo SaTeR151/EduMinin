@@ -165,6 +165,9 @@ document.addEventListener('DOMContentLoaded', () => {
       msgEl.style.color = '#28a745';
       msgEl.textContent = json.message || 'Регистрация прошла успешно!';
       form.reset();
+      setTimeout(() => {
+          window.location.href = 'lk';
+      }, 500);
     })
     .catch(err => {
       console.error(err);
