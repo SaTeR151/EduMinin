@@ -42,7 +42,15 @@ type SQLiteManagerDB interface {
 	DeleteAuthorizationUser(login string) error
 	GetUserInfo(login string) (oldLogin string, oldPass string, err error)
 	Signup(login string, rt string) error
-	GetToken(login string) (rToken string, err error)
+	GetTokens(login string) (rTokens []string, err error)
+
+	ChangeEmail(login string, email string) error
+	ChangeFIO(login string, fio string) error
+	ChangePhone(login string, phone string) error
+	ChangePhoto(login string, photo string) error
+	AddUserCourse(login string, id string) error
+	GetUserCourses(login string) ([]dto.Course, error)
+	GetLKInfo(login string) (dto.LK, error)
 }
 
 type SQLiteManager struct {
@@ -137,16 +145,16 @@ func (db *SQLiteManager) GetCourses(limit string) ([]dto.Course, error) {
 		return nil, err
 	}
 	defer rows.Close()
-	var news []dto.Course
+	var courses []dto.Course
 	for rows.Next() {
-		var n dto.Course
-		err := rows.Scan(&n.Id, &n.Title, &n.Description, &n.AcademicHours, &n.Price, &n.Image)
+		var c dto.Course
+		err := rows.Scan(&c.Id, &c.Title, &c.Description, &c.AcademicHours, &c.Price, &c.Image)
 		if err != nil {
 			return nil, err
 		}
-		news = append(news, n)
+		courses = append(courses, c)
 	}
-	return news, nil
+	return courses, nil
 }
 
 func (db *SQLiteManager) GetCoursesTitle() ([]dto.CoursesTitle, error) {
@@ -157,12 +165,12 @@ func (db *SQLiteManager) GetCoursesTitle() ([]dto.CoursesTitle, error) {
 	defer rows.Close()
 	var coursesTitle []dto.CoursesTitle
 	for rows.Next() {
-		var n dto.CoursesTitle
-		err := rows.Scan(&n.Title)
+		var c dto.CoursesTitle
+		err := rows.Scan(&c.Title)
 		if err != nil {
 			return nil, err
 		}
-		coursesTitle = append(coursesTitle, n)
+		coursesTitle = append(coursesTitle, c)
 	}
 	return coursesTitle, nil
 }
@@ -202,12 +210,12 @@ func (db *SQLiteManager) GetNews(limit string) ([]dto.News, error) {
 	defer rows.Close()
 	var news []dto.News
 	for rows.Next() {
-		var n dto.News
-		err := rows.Scan(&n.Id, &n.Title, &n.Description, &n.Text, &n.Date, &n.Image)
+		var c dto.News
+		err := rows.Scan(&c.Id, &c.Title, &c.Description, &c.Text, &c.Date, &c.Image)
 		if err != nil {
 			return nil, err
 		}
-		news = append(news, n)
+		news = append(news, c)
 	}
 	return news, nil
 }
@@ -293,12 +301,12 @@ func (db *SQLiteManager) GetEvents(limit string) ([]dto.Events, error) {
 	defer rows.Close()
 	var events []dto.Events
 	for rows.Next() {
-		var n dto.Events
-		err := rows.Scan(&n.Id, &n.Title, &n.Text, &n.Date, &n.Image)
+		var c dto.Events
+		err := rows.Scan(&c.Id, &c.Title, &c.Text, &c.Date, &c.Image)
 		if err != nil {
 			return nil, err
 		}
-		events = append(events, n)
+		events = append(events, c)
 	}
 	return events, nil
 }
@@ -323,7 +331,7 @@ func (db *SQLiteManager) CheckUsersLoginExists(login string) error {
 }
 
 func (db *SQLiteManager) RegisterUser(login string, pass string) error {
-	_, err := db.db.Exec("INSERT INTO users (login, pass) values (:login, :pass)",
+	_, err := db.db.Exec("INSERT INTO users (login, pass, fio) values (:login, :pass, :login)",
 		sql.Named("login", login),
 		sql.Named("pass", pass),
 	)
@@ -387,18 +395,90 @@ func (db *SQLiteManager) Signup(login string, rt string) error {
 	return err
 }
 
-func (db *SQLiteManager) GetToken(login string) (rToken string, err error) {
+func (db *SQLiteManager) GetTokens(login string) (rTokens []string, err error) {
 	rows, err := db.db.Query("SELECT refresh_token FROM auth WHERE login = :login", sql.Named("login", login))
 	if err != nil {
-		return rToken, err
+		return rTokens, err
 	}
 	defer rows.Close()
 	for rows.Next() {
-		err := rows.Scan(&rToken)
+		err := rows.Scan(&rTokens)
 		if err != nil {
-			return rToken, err
+			return rTokens, err
 
 		}
 	}
-	return rToken, err
+	return rTokens, err
+}
+
+func (db *SQLiteManager) ChangeEmail(login string, email string) error {
+	_, err := db.db.Exec("UPDATE users SET email = :email WHERE login = :login",
+		sql.Named("login", login),
+		sql.Named("email", email),
+	)
+	return err
+}
+
+func (db *SQLiteManager) ChangeFIO(login string, fio string) error {
+	_, err := db.db.Exec("UPDATE users SET fio = :fio WHERE login = :login",
+		sql.Named("login", login),
+		sql.Named("fio", fio),
+	)
+	return err
+}
+func (db *SQLiteManager) ChangePhone(login string, phone string) error {
+	_, err := db.db.Exec("UPDATE users SET phone = :phone WHERE login = :login",
+		sql.Named("login", login),
+		sql.Named("phone", phone),
+	)
+	return err
+}
+func (db *SQLiteManager) ChangePhoto(login string, photo string) error {
+	_, err := db.db.Exec("UPDATE users SET photo = :photo WHERE login = :login",
+		sql.Named("login", login),
+		sql.Named("photo", photo),
+	)
+	return err
+}
+
+func (db *SQLiteManager) AddUserCourse(login string, id string) error {
+	_, err := db.db.Exec("INSERT INTO users_courses (login, course_id) value (:login, :id)",
+		sql.Named("login", login),
+		sql.Named("id", id),
+	)
+	return err
+}
+
+func (db *SQLiteManager) GetUserCourses(login string) ([]dto.Course, error) {
+	rows, err := db.db.Query("SELECT c.* FROM courses c JOIN users_courses uc ON c.id = uc.course_id WHERE uc.login = :login", sql.Named("login", login))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var courses []dto.Course
+	for rows.Next() {
+		var c dto.Course
+		err := rows.Scan(&c.Id, &c.Title, &c.Description, &c.AcademicHours, &c.Price, &c.Image)
+		if err != nil {
+			return nil, err
+		}
+		courses = append(courses, c)
+	}
+	return courses, nil
+}
+
+func (db *SQLiteManager) GetLKInfo(login string) (dto.LK, error) {
+	var lk dto.LK
+	rows, err := db.db.Query("SELECT fio, photo, email, phone WHERE login = :login", sql.Named("login", login))
+	if err != nil {
+		return lk, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		err := rows.Scan(&lk.Fio, &lk.Photo, &lk.Email, &lk.Phone)
+		if err != nil {
+			return lk, err
+		}
+	}
+	return lk, nil
 }

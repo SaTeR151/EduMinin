@@ -52,5 +52,21 @@ type UserData struct {
 }
 
 type Message struct {
-	Message string
+	Message string `json:"message"`
+}
+
+type LK struct {
+	Fio     string   `json:"fio"`
+	Email   string   `json:"email"`
+	Phone   string   `json:"phone"`
+	Photo   string   `json:"photo"`
+	Courses []Course `json:"courses"`
+}
+
+type SaveUserCourse struct {
+	Id string `json:"id"`
+}
+
+type ChangingData struct {
+	Changing string `json:"changing"`
 }
