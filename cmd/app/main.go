@@ -46,7 +46,7 @@ func main() {
 	router.Static("/main/css", "./web/css")       // если они у вас есть
 	router.Static("/main/js", "./web/js")         // если они у вас есть
 
-	// 2. Правило «/main/<page> -> ./web/<page>.html»
+	// // 2. Правило «/main/<page> -> ./web/<page>.html»
 	router.GET("/main/:page", func(c *gin.Context) {
 		page := c.Param("page")
 		// защита от ".." и лишних слэшей
@@ -82,7 +82,7 @@ func main() {
 		apiGroup := router.Group("/api")
 		{
 			apiGroup.GET("/news", restnews.GetNews(services))
-			newsGroups := apiGroup.Group("/news", middlewares.CheckAuthorization(services))
+			newsGroups := apiGroup.Group("/news")
 			newsGroups.POST("/", restnews.PostNews(services))
 			newsGroups.DELETE("/", restnews.DeleteNews(services))
 		}
