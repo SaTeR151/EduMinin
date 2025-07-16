@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Личный кабинет — Учебный центр</title>
+  <link rel="icon" href="assets/icons/favicon.png" type="image/png">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+
+    /* Вертикальный список «Мои курсы» */
+    .my-courses-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .course-item {
+      display: flex;
+      align-items: center;
+      background: #fff;
+      border-radius: var(--border-radius);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    .course-item img {
+      flex-shrink: 0;
+      width: 60px;
+      height: auto;
+      object-fit: cover;
+      margin: 20px;
+    }
+    .course-item .course-info {
+      padding: 15px;
+      flex: 1;
+    }
+    .course-item .course-info h4 {
+      margin: 0 0 5px;
+      color: var(--primary-2);
+    }
+    .course-item .course-info p {
+      margin: 0;
+      color: #555;
+      font-size: 0.9rem;
+    }
+     /* — общий layout — */
+    html, body { height:100%; margin:0; }
+    body { font-family: Arial, sans-serif; background:#f9f9f9; }
+
+    main {
+      display: flex;
+      gap: 20px;
+      max-width: 1200px;
+      margin: 120px auto 60px;
+      padding: 0 20px;
+    }
+
+    /* — Sidebar — */
+    .profile-sidebar {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      flex: 0 0 250px;
+      background: #fff;
+      border-radius: var(--border-radius);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 20px;
+    }
+    .profile-avatar {
+      width: 95%;
+      height: auto;
+      border-radius: var(--border-radius);
+      object-fit: cover;
+      display: block;
+      margin: 0 auto 15px;
+    }
+    .profile-sidebar button {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+      border: none;
+      border-radius: var(--border-radius);
+      color: #fff;
+      cursor: pointer;
+    }
+    .btn-photo    { background: var(--secondaryA-4); }
+    .btn-fio      { background: var(--secondaryB-4); }
+    .btn-email    { background: var(--secondaryA-5); }
+    .btn-phone    { background: var(--secondaryB-5); }
+    .btn-exit     { background: #e74c3c; margin-top:20px; }
+
+    /* — Main profile info — */
+    .profile-main {
+      flex:1;
+      background:#fff;
+      border-radius:var(--border-radius);
+      box-shadow:0 2px 5px rgba(0,0,0,0.1);
+      padding:20px;
+    }
+    .profile-main h2 { margin:0 0 10px; color:var(--primary-2); }
+    .profile-main p { margin:0 0 5px; }
+
+    /* — «Мои курсы» вертикальный список — */
+    .my-courses-list {
+      display:flex;
+      flex-direction:column;
+      gap:20px;
+      margin-top:15px;
+    }
+    .course-item {
+      display:flex;
+      align-items:center;
+      background:#fff;
+      border-radius:var(--border-radius);
+      box-shadow:0 2px 5px rgba(0,0,0,0.1);
+      overflow:hidden;
+    }
+    .course-item img {
+      width:60px;
+      height:60px;
+      object-fit:cover;
+      margin:20px;
+    }
+    .course-info { padding:15px; }
+    .course-info h4 { margin:0 0 5px; color:var(--primary-2); }
+    .course-info p { margin:0; color:#555; font-size:.9rem; }
+
+    /* — Модальное окно для редактирования — */
+    #modal-bg {
+      display:none;
+      position:fixed; top:0; left:0; right:0; bottom:0;
+      background:rgba(0,0,0,0.6);
+      justify-content:center; align-items:center;
+      z-index:10000;
+    }
+    #modal {
+      background:#fff;
+      padding:20px;
+      border-radius:var(--border-radius);
+      width:300px;
+      text-align:center;
+    }
+    #modal input {
+      width:100%; padding:8px; margin-bottom:15px;
+      border:1px solid #ccc; border-radius:var(--border-radius);
+    }
+    #modal button {
+      padding:8px 16px;
+      border:none; border-radius:var(--border-radius);
+      background:var(--secondaryA-4); color:#fff;
+      cursor:pointer;
+    }
+    .enroll-section {
+      background: #fff;
+      padding: 20px;
+      border-radius: var(--border-radius);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+    .enroll-section h3 {
+      margin-top: 0;
+      color: var(--primary-3);
+      font-size: 1.2rem;
+    }
+    .enroll-section select {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: var(--border-radius);
+    }
+    .enroll-section button {
+      display: inline-block;
+      padding: 12px 24px;
+      background: var(--secondaryB-1);
+      color: #fff;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+    .enroll-section button:hover {
+      background: var(--secondaryB-2);
+    }
+    #enroll-message {
+      margin-top: 10px;
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- фиксированное меню -->
+  <header class="site-header">
+    <nav class="main-nav">
+      <button class="menu-toggle" aria-label="Меню">
+        <img src="assets/icons/menu.png" alt="Меню" class="menu-icon">
+      </button>
+      <ul class="nav-links">
+          <li><a href="index" class="active">Главная</a></li>
+          <li><a href="news">Новости</a></li>
+          <li><a href="reviews">Отзывы</a></li>
+          <li><a href="about">О нас</a></li>
+      </ul>
+      <ul class="auth-links">
+        <li>
+          <a href="lk" class="active"></a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Sidebar -->
+    <aside class="profile-sidebar">
+      <img id="avatar"
+       src="assets/images/placeholder.png"
+       alt="Аватар"
+       class="profile-avatar">
+      <!-- сменить фото -->
+      <button class="btn-photo"    id="change-photo-btn">Сменить фото</button>
+      <input type="file"            id="photo-input" accept="image/*" style="display:none">
+      <!-- сменить ФИО -->
+      <button class="btn-fio"      id="change-fio-btn">Сменить имя</button>
+      <!-- сменить email -->
+      <button class="btn-email"    id="change-email-btn">Сменить email</button>
+      <!-- сменить телефон -->
+      <button class="btn-phone"    id="change-phone-btn">Сменить телефон</button>
+      <!-- выйти -->
+      <button class="btn-exit"     id="logout-btn">Выйти из личного кабинета</button>
+    </aside>
+
+    <!-- Основной контент -->
+    <section class="profile-main">
+      <h2 id="user-name">Загрузка…</h2>
+      <p><strong>Email:</strong> <span id="user-email">–</span></p>
+      <p><strong>Телефон:</strong> <span id="user-phone">–</span></p>
+
+      <div class="enroll-section">
+        <h3>Записаться на курс</h3>
+        <select id="enroll-select">
+          <option value="" disabled selected>Загрузка курсов…</option>
+        </select>
+        <button id="enroll-btn">Записаться</button>
+        <div id="enroll-message"></div>
+      </div>
+
+      <h3>Мои курсы</h3>
+      <div class="my-courses-list" id="courses-list">
+        <!-- сюда JS подставит блоки -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Подвал -->
+  <footer class="site-footer">
+        <div class="footer-top">
+            <div class="footer-logo-desc">
+                <img src="assets/images/footer-logo.png" alt="Логотип" class="footer-logo">
+                <p>CodeBrothers — учебный IT-центр из Нижнего Новгорода.</p>
+                <p>Учим программировать вместе и по-братски.</p>
+            </div>
+            <div class="footer-links">
+                <a href="catalog">Каталог курсов</a>
+                <a href="schedule">Расписание</a>
+                <a href="about">О нас</a>
+                <a href="reviews">Отзывы</a>
+            </div>
+            <div class="footer-links" id="centers">
+                <h4>Учебные центры</h4>
+                <a href="centers">ул. Ульянова, 1</a>
+                <a href="centers">ул. Ульянова, 10а</a>
+                <a href="centers">ул. Челюскинцев, 9</a>
+            </div>
+        </div>
+        <hr>
+        <div class="footer-bottom">
+            <div class="footer-copy">© 2025 Все права защищены</div>
+            <div class="footer-policy">
+                <a href="docs/Соглашение на обработку персональных данных.pdf">Соглашение на обработку персональных данных</a>
+                <a href="docs/Политика конфиденциальности.pdf">Политика конфиденциальности</a>
+                <a href="docs/Сведения об образовательной организации.pdf">Сведения об образовательной организации</a>
+                <a href="docs/Информация об оплате.pdf">Информация об оплате</a>
+            </div>
+            <div class="footer-social">
+                <a href="https://vk.com" target="_blank"><i class="fab fa-vk"></i></a>
+                <a href="https://t.me" target="_blank"><i class="fab fa-telegram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const avatarImg   = document.getElementById('avatar');
+    const nameEl      = document.getElementById('user-name');
+    const emailEl     = document.getElementById('user-email');
+    const phoneEl     = document.getElementById('user-phone');
+    const coursesList = document.getElementById('courses-list');
+
+    // Элементы нового блока
+    const enrollSelect  = document.getElementById('enroll-select');
+    const enrollBtn     = document.getElementById('enroll-btn');
+    const enrollMessage = document.getElementById('enroll-message');
+
+    // Всплывающее модальное окно
+    const modalBg     = document.getElementById('modal-bg');
+    const modalTitle  = document.getElementById('modal-title');
+    const modalInput  = document.getElementById('modal-input');
+    const modalSave   = document.getElementById('modal-save');
+    let currentField; // 'name' | 'email' | 'phone'
+
+    // 1) Загрузить данные профиля
+    fetch('http://localhost:8080/api/users', { method:'POST' })
+      .then(r=>r.json())
+      .then(json=>{
+        const u = json.data;
+        avatarImg.src       = u.photo;
+        nameEl.textContent  = u.name;
+        emailEl.textContent = u.email;
+        phoneEl.textContent = u.phone;
+      });
+
+    // 2) Загрузить «мои курсы»
+    function loadUserCourses(){
+      fetch('http://localhost:8080/api/userscourses', { method:'POST' })
+        .then(r=>r.json())
+        .then(json=>{
+          coursesList.innerHTML = '';
+          json.data.forEach(c=>{
+            const div = document.createElement('div');
+            div.className = 'course-item';
+            div.innerHTML = `
+              <img src="${c.img}" alt="${c.title}">
+              <div class="course-info">
+                <h4>${c.title}</h4>
+                <p>${c.description||''}</p>
+              </div>`;
+            coursesList.appendChild(div);
+          });
+        });
+    }
+    loadUserCourses();
+
+    // 3) Загрузить список курсов для записи
+    function fetchCoursesForEnroll(){
+      fetch('http://localhost:8080/api/courses', { method:'GET' })
+        .then(r=>r.json())
+        .then(json=>{
+          enrollSelect.innerHTML = '<option value="" disabled selected>Выберите курс</option>';
+          json.data.forEach(c=>{
+            const opt = document.createElement('option');
+            opt.value       = c.id;
+            opt.textContent = c.title;
+            enrollSelect.appendChild(opt);
+          });
+        })
+        .catch(()=>{
+          enrollSelect.innerHTML = '<option value="" disabled>Ошибка загрузки</option>';
+        });
+    }
+    fetchCoursesForEnroll();
+
+    // 4) Обработчик кнопки «Записаться»
+    enrollBtn.addEventListener('click', () => {
+      const course = enrollSelect.value;
+      if(!course){
+        enrollMessage.style.color = '#d9534f';
+        enrollMessage.textContent = 'Пожалуйста, выберите курс';
+        return;
+      }
+      fetch('http://localhost:8080/api/signup', {
+        method:'POST',
+        headers:{ 'Content-Type':'application/json' },
+        body: JSON.stringify({ course })
+      })
+      .then(r=>r.json())
+      .then(json=>{
+        enrollMessage.style.color = '#28a745';
+        enrollMessage.textContent = json.message || 'Запись успешна!';
+        loadUserCourses();  // обновить список «Мои курсы»
+      })
+      .catch(()=>{
+        enrollMessage.style.color = '#d9534f';
+        enrollMessage.textContent = 'Ошибка при записи';
+      });
+    });
+
+    // — Сменить фото —
+    document.getElementById('change-photo-btn').onclick = _=>{
+      document.getElementById('photo-input').click();
+    };
+    document.getElementById('photo-input').onchange = e=>{
+      const file = e.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = ()=>{
+        fetch('http://localhost:8080/api/changephoto', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ photo: reader.result })
+        })
+        .then(r=>r.json())
+        .then(json=>{
+          avatarImg.src = json.data.photo;
+        });
+      };
+      reader.readAsDataURL(file);
+    };
+
+    // Открытие модалки для полей name/email/phone
+    function openModal(field, label){
+      currentField = field;
+      modalTitle.textContent = 'Изменить ' + label;
+      modalInput.value = document.getElementById('user-'+field).textContent.trim();
+      modalBg.style.display = 'flex';
+    }
+    document.getElementById('change-fio-btn').onclick   = ()=>openModal('name','имя');
+    document.getElementById('change-email-btn').onclick = ()=>openModal('email','email');
+    document.getElementById('change-phone-btn').onclick = ()=>openModal('phone','телефон');
+
+    // Сохранение из модалки
+    modalSave.onclick = ()=>{
+      const val = modalInput.value.trim();
+      if(!val) return;
+      let url = '';
+      if(currentField==='name')  url = 'changefio';
+      if(currentField==='email') url = 'changeemail';
+      if(currentField==='phone') url = 'changephone';
+      fetch(`http://localhost:8080/api/${url}`, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ [currentField]: val })
+      })
+      .then(r=>r.json())
+      .then(json=>{
+        document.getElementById('user-'+currentField)
+                .textContent = json.data[currentField];
+        modalBg.style.display = 'none';
+      });
+    };
+
+    // Закрыть модалку при клике вне
+    modalBg.onclick = e=>{
+      if(e.target===modalBg) modalBg.style.display = 'none';
+    };
+
+    // Выход из кабинета
+    document.getElementById('logout-btn').onclick = ()=>{
+      fetch('http://localhost:8080/api/exit', { method:'POST' })
+        .then(_=> window.location.href = '/');
+    };
+  });
+  </script>
+
+</body>
+</html>
