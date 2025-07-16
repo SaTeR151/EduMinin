@@ -36,7 +36,7 @@ type SQLiteManagerDB interface {
 	GetEvents(limit string) ([]dto.Events, error)
 
 	CheckUsersLoginExists(login string) error
-	RegisterUser(login string, pass string) error
+	RegisterUser(login string, pass string, fio string) error
 
 	CheckUserAuthorization(login string) error
 	DeleteAuthorizationUser(login string) error
@@ -330,10 +330,11 @@ func (db *SQLiteManager) CheckUsersLoginExists(login string) error {
 	return nil
 }
 
-func (db *SQLiteManager) RegisterUser(login string, pass string) error {
-	_, err := db.db.Exec("INSERT INTO users (login, pass, fio) values (:login, :pass, :login)",
+func (db *SQLiteManager) RegisterUser(login string, pass string, fio string) error {
+	_, err := db.db.Exec("INSERT INTO users (login, pass, fio) values (:login, :pass, :fio)",
 		sql.Named("login", login),
 		sql.Named("pass", pass),
+		sql.Named("fio", fio),
 	)
 	if err != nil {
 		return apperror.ErrUserAlreadyExists

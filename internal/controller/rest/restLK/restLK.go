@@ -50,6 +50,11 @@ func PostCourse(services *services.Services) gin.HandlerFunc {
 			c.AbortWithStatusJSON(http.StatusBadRequest, dto.Error{Error: apperror.ErrIncorrectRequestBody.Error()})
 			return
 		}
+		if userCourse.Id == "" {
+			logrus.Warn(err)
+			c.AbortWithStatusJSON(http.StatusBadRequest, dto.Error{Error: apperror.ErrIncorrectRequestBody.Error()})
+			return
+		}
 		if err := services.LkManager.AddCourse(accessTCokie.Value, userCourse.Id); err != nil {
 			if err == apperror.ErrUnauthorized {
 				logrus.Warn(err)
@@ -76,6 +81,11 @@ func PutEmail(services *services.Services) gin.HandlerFunc {
 		}
 		var changing dto.ChangingData
 		if err := c.ShouldBindJSON(&changing); err != nil {
+			logrus.Warn(err)
+			c.AbortWithStatusJSON(http.StatusBadRequest, dto.Error{Error: apperror.ErrIncorrectRequestBody.Error()})
+			return
+		}
+		if changing.Changing == "" {
 			logrus.Warn(err)
 			c.AbortWithStatusJSON(http.StatusBadRequest, dto.Error{Error: apperror.ErrIncorrectRequestBody.Error()})
 			return
@@ -110,6 +120,11 @@ func PutPhone(services *services.Services) gin.HandlerFunc {
 			c.AbortWithStatusJSON(http.StatusBadRequest, dto.Error{Error: apperror.ErrIncorrectRequestBody.Error()})
 			return
 		}
+		if changing.Changing == "" {
+			logrus.Warn(err)
+			c.AbortWithStatusJSON(http.StatusBadRequest, dto.Error{Error: apperror.ErrIncorrectRequestBody.Error()})
+			return
+		}
 		if err := services.LkManager.ChangePhone(accessTCokie.Value, changing.Changing); err != nil {
 			if err == apperror.ErrUnauthorized {
 				logrus.Warn(err)
@@ -140,6 +155,11 @@ func PutPhoto(services *services.Services) gin.HandlerFunc {
 			c.AbortWithStatusJSON(http.StatusBadRequest, dto.Error{Error: apperror.ErrIncorrectRequestBody.Error()})
 			return
 		}
+		if changing.Changing == "" {
+			logrus.Warn(err)
+			c.AbortWithStatusJSON(http.StatusBadRequest, dto.Error{Error: apperror.ErrIncorrectRequestBody.Error()})
+			return
+		}
 		if err := services.LkManager.ChangePhoto(accessTCokie.Value, changing.Changing); err != nil {
 			if err == apperror.ErrUnauthorized {
 				logrus.Warn(err)
@@ -166,6 +186,11 @@ func PutFio(services *services.Services) gin.HandlerFunc {
 		}
 		var changing dto.ChangingData
 		if err := c.ShouldBindJSON(&changing); err != nil {
+			logrus.Warn(err)
+			c.AbortWithStatusJSON(http.StatusBadRequest, dto.Error{Error: apperror.ErrIncorrectRequestBody.Error()})
+			return
+		}
+		if changing.Changing == "" {
 			logrus.Warn(err)
 			c.AbortWithStatusJSON(http.StatusBadRequest, dto.Error{Error: apperror.ErrIncorrectRequestBody.Error()})
 			return

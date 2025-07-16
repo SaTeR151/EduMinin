@@ -34,7 +34,7 @@ func (am *AuthManager) Register(data dto.UserData) (err error) {
 	if err != nil && err != apperror.ErrUncorrectData {
 		return err
 	}
-	return am.db.RegisterUser(fmt.Sprintf("%x", sha256.Sum256([]byte(data.Login))), fmt.Sprintf("%x", sha256.Sum256([]byte(data.Pass))))
+	return am.db.RegisterUser(fmt.Sprintf("%x", sha256.Sum256([]byte(data.Login))), fmt.Sprintf("%x", sha256.Sum256([]byte(data.Pass))), data.Login)
 }
 
 func (am *AuthManager) Signup(data dto.UserData, userAgent string, ip string) (aToken string, rToken string, err error) {

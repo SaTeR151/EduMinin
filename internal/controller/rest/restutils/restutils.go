@@ -19,6 +19,6 @@ func SetCookieTokens(c *gin.Context, accessT string, refreshT string) {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, dto.Error{Error: err.Error()})
 		return
 	}
-	c.SetCookie("EduMininAT", accessT, timeExp, "/", "localhost", false, true)
-	c.SetCookie("EduMininRT", rtB64, timeExp, "/", "localhost", true, true)
+	c.SetCookie("EduMininAT", accessT, timeExp, "/", "", false, true)
+	c.SetCookie("EduMininRT", rtB64, timeExp, "/", "", false, true)
 }
