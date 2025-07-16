@@ -37,7 +37,6 @@ func (lkm *LkManager) GetLkInfo(aToken string) (dto.LK, error) {
 	login = fmt.Sprintf("%x", sha256.Sum256([]byte(login)))
 	lk, err = lkm.db.GetLKInfo(login)
 	if err != nil {
-		fmt.Println(123)
 		return lk, err
 	}
 	logrus.Debug("gettig user courses")

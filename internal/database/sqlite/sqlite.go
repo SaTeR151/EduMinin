@@ -444,7 +444,6 @@ func (db *SQLiteManager) ChangePhoto(login string, photo string) error {
 }
 
 func (db *SQLiteManager) AddUserCourse(login string, id string) error {
-	fmt.Println(id)
 	_, err := db.db.Exec("INSERT INTO users_courses (login, course_id) values (:login, :id)",
 		sql.Named("login", login),
 		sql.Named("id", id),
