@@ -34,7 +34,7 @@ func (am *AuthManager) Register(data dto.UserData) (err error) {
 	if err != nil && err != apperror.ErrUncorrectData {
 		return err
 	}
-	return am.db.RegisterUser(fmt.Sprintf("%x", sha256.Sum256([]byte(data.Login))), fmt.Sprintf("%x", sha256.Sum256([]byte(data.Pass))))
+	return am.db.RegisterUser(fmt.Sprintf("%x", sha256.Sum256([]byte(data.Login))), fmt.Sprintf("%x", sha256.Sum256([]byte(data.Pass))), data.Login)
 }
 
 func (am *AuthManager) Signup(data dto.UserData, userAgent string, ip string) (aToken string, rToken string, err error) {
@@ -50,7 +50,7 @@ func (am *AuthManager) Signup(data dto.UserData, userAgent string, ip string) (a
 		return aToken, rToken, err
 	}
 	if oldLogin != login || oldPass != fmt.Sprintf("%x", sha256.Sum256([]byte(data.Pass))) {
-		return aToken, rToken, apperror.ErrUserNotFound
+		return aToken, rToken, apperror.ErrUncorrectData
 
 	}
 	logrus.Debug("checking user authorization")
@@ -121,17 +121,20 @@ func (am *AuthManager) RefreshTokens(at string, rt string, userAgent string, ip 
 }
 
 func (am *AuthManager) CompareRT(rToken, login string) (bool, error) {
-	rTokenOld, err := am.db.GetToken(fmt.Sprintf("%x", sha256.Sum256([]byte(login))))
+	rToken = fmt.Sprintf("%x", sha256.Sum256([]byte(rToken)))
+	rTokensOld, err := am.db.GetTokens(fmt.Sprintf("%x", sha256.Sum256([]byte(login))))
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return false, apperror.ErrUnauthorized
 		}
 		return false, err
 	}
-	if fmt.Sprintf("%x", sha256.Sum256([]byte(rToken))) != rTokenOld {
-		return false, nil
+	for _, v := range rTokensOld {
+		if rToken == v {
+			return true, nil
+		}
 	}
-	return true, nil
+	return false, nil
 }
 
 func (am *AuthManager) CheckTokens(aToken string, rToken string) error {

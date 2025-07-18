@@ -1,11 +1,17 @@
 package main
 
 import (
+	"net/http"
+	"os"
+	"path/filepath"
+	"strings"
+
 	"github.com/SaTeR151/EduMinin/internal/config"
 	"github.com/SaTeR151/EduMinin/internal/controller/rest/middlewares"
 	restauth "github.com/SaTeR151/EduMinin/internal/controller/rest/restAuth"
 	restcourses "github.com/SaTeR151/EduMinin/internal/controller/rest/restCourses"
 	restevents "github.com/SaTeR151/EduMinin/internal/controller/rest/restEvents"
+	restlk "github.com/SaTeR151/EduMinin/internal/controller/rest/restLK"
 	restnews "github.com/SaTeR151/EduMinin/internal/controller/rest/restNews"
 	restreviews "github.com/SaTeR151/EduMinin/internal/controller/rest/restReviews"
 	"github.com/SaTeR151/EduMinin/internal/database/sqlite"
@@ -36,43 +42,47 @@ func main() {
 
 	router := gin.Default()
 
-	// router.Static("/main/assets", "./web/assets") // если они у вас есть
-	// router.Static("/main/css", "./web/css")       // если они у вас есть
-	// router.Static("/main/js", "./web/js")         // если они у вас есть
+	router.Static("/main/assets", "./web/assets") // если они у вас есть
+	router.Static("/main/css", "./web/css")       // если они у вас есть
+	router.Static("/main/js", "./web/js")         // если они у вас есть
 
 	// // 2. Правило «/main/<page> -> ./web/<page>.html»
-	// router.GET("/main/:page", func(c *gin.Context) {
-	// 	page := c.Param("page")
-	// 	// защита от ".." и лишних слэшей
-	// 	safe := filepath.Clean(page)
-	// 	if strings.ContainsRune(safe, os.PathSeparator) {
-	// 		c.AbortWithStatus(http.StatusNotFound)
-	// 		return
-	// 	}
+	router.GET("/main/:page", func(c *gin.Context) {
+		page := c.Param("page")
+		// защита от ".." и лишних слэшей
+		safe := filepath.Clean(page)
+		if strings.ContainsRune(safe, os.PathSeparator) {
+			c.AbortWithStatus(http.StatusNotFound)
+			return
+		}
 
-	// 	file := filepath.Join("web", safe+".html")
-	// 	if _, err := os.Stat(file); err == nil {
-	// 		c.File(file)
-	// 		return
-	// 	}
-	// 	c.AbortWithStatus(http.StatusNotFound)
-	// })
+		file := filepath.Join("web", safe+".html")
+		if _, err := os.Stat(file); err == nil {
+			if safe+".html" == "lk.html" {
+				handl := middlewares.CheckAuthorization(services)
+				handl(c)
+			}
+			c.File(file)
+		} else {
+			c.File("./web/404.html")
+		}
+	})
 
-	// // 3. Главная: /main/ (или просто /) → index.html
-	// router.GET("/main/", func(c *gin.Context) {
-	// 	c.File("./web/index.html")
-	// })
-	// router.GET("/", func(c *gin.Context) { // по желанию
-	// 	c.Redirect(http.StatusMovedPermanently, "/main/")
-	// })
+	// 3. Главная: /main/ (или просто /) → index.html
+	router.GET("/main/", func(c *gin.Context) {
+		c.File("./web/index.html")
+	})
+	router.GET("/", func(c *gin.Context) { // по желанию
+		c.Redirect(http.StatusMovedPermanently, "/main/")
+	})
 
-	router.Static("/main", "./web")
+	// router.Static("/main", "./web")
 
 	{
 		apiGroup := router.Group("/api")
 		{
 			apiGroup.GET("/news", restnews.GetNews(services))
-			newsGroups := apiGroup.Group("/news", middlewares.CheckAuthorization(services))
+			newsGroups := apiGroup.Group("/news")
 			newsGroups.POST("/", restnews.PostNews(services))
 			newsGroups.DELETE("/", restnews.DeleteNews(services))
 		}
@@ -101,7 +111,15 @@ func main() {
 			authGroup.POST("/register", restauth.Register(services))
 			authGroup.POST("/logout", middlewares.CheckAuthorization(services), restauth.Logout(services))
 		}
-
+		{
+			apiGroup.GET("/lk", middlewares.CheckAuthorization(services), restlk.GetLkInfo(services))
+			authGroup := apiGroup.Group("/lk", middlewares.CheckAuthorization(services))
+			authGroup.PUT("/changefio", restlk.PutFio(services))
+			authGroup.PUT("/changephoto", restlk.PutPhoto(services))
+			authGroup.PUT("/changeemail", restlk.PutEmail(services))
+			authGroup.PUT("/changephone", restlk.PutPhone(services))
+			authGroup.POST("/addcourse", restlk.PostCourse(services))
+		}
 	}
 	if err := router.Run(":" + serverConfig.Port); err != nil {
 		logrus.Error(err)

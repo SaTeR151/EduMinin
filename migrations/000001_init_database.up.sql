@@ -37,10 +37,23 @@ CREATE TABLE events (
 CREATE TABLE users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     login TEXT UNIQUE,       
-    pass TEXT                     
+    pass TEXT,
+    fio TEXT    DEFAULT '',
+    photo TEXT DEFAULT '',
+    email TEXT DEFAULT '',
+    phone TEXT   DEFAULT ''                  
 );
-
 CREATE INDEX index_users_login ON users(login);
+
+CREATE TABLE users_courses (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    login TEXT NOT NULL,       
+    course_id INTEGER NOT NULL,
+    FOREIGN KEY (login) REFERENCES users(login) ON DELETE CASCADE,
+    FOREIGN KEY (course_id) REFERENCES courses(course_id) ON DELETE CASCADE                 
+);
+CREATE INDEX index_users_courses_login ON users_courses(login);
+
 
 CREATE TABLE auth(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -50,3 +63,4 @@ CREATE TABLE auth(
 );
 
 CREATE INDEX index_auth_login ON auth(login);
+
